@@ -1,5 +1,4 @@
 import * as mqtt from 'mqtt';
-import { MQTTFrontModeOut } from '../data/static_config';
 
 export class MQTTServer {
     private _mqtt_client: mqtt.MqttClient | undefined;
@@ -13,11 +12,10 @@ export class MQTTServer {
         });
     }
 
-    send() {
+    send(command_id: string, command_value: number) {
         if (this._mqtt_client == null) return;
 
-        console.log(this.get_mqtt_cmd(MQTTFrontModeOut.ID));
-        this._mqtt_client.publish(this.get_mqtt_cmd(MQTTFrontModeOut.ID),  MQTTFrontModeOut.Idle.toString() );
+        this._mqtt_client.publish(this.get_mqtt_cmd(command_id),  command_value.toString() );
     }
 
     private get_mqtt_cmd(cmd_message_id: string) {
