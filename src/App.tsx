@@ -1,9 +1,11 @@
 import './App.scss'
 import { MQTTServer } from './mqtt/mqtt_server'
 import { API, MQTTFrontModeOut } from './data/static_share_varaible'
+import EventSystem from './utility/EventSystem';
 
 function App() {
-  const mqtt_server = new MQTTServer();
+  const event_system = new EventSystem();
+  const mqtt_server = new MQTTServer(event_system);
 
   return (
     <>
