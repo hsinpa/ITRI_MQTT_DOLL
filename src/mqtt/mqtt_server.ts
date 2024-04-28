@@ -40,7 +40,9 @@ export class MQTTServer {
             console.log("Connect is fun");
         });
 
-        this._mqtt_client.on("message", this._mqtt_listener?.on_message);          
+        this._mqtt_client.on("message", (topic, message) => {
+            console.log(topic, message.toString());
+        });          
     }
 
     public send(command_id: string, command_value: number) {

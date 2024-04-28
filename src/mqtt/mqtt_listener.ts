@@ -30,14 +30,18 @@ export class MqttEventListener {
 
         this._event_dict = new Set<string>();
 
-        for (let e_listener in EVENT_LISTENER_LIST) {
-            this._event_dict.add(this._get_cmd_callback(e_listener));
+        for (let i in EVENT_LISTENER_LIST) {
+            let event_id = this._get_cmd_callback(EVENT_LISTENER_LIST[i]);
+            console.log(event_id);
+            this._event_dict.add(event_id);
+            client.subscribe(event_id);
         }
     }
 
     public on_message(topic: string, payload: Buffer, packet: IPublishPacket) {
+        console.log('on message ' + topic);
+        
         if (topic in this._event_dict) {
-            console.log('on message ' + topic);
             console.log(payload);
             console.log(packet);
 

@@ -2,6 +2,7 @@ import './App.scss'
 import { MQTTServer } from './mqtt/mqtt_server'
 import { API, MQTTFrontModeOut } from './data/static_share_varaible'
 import EventSystem from './utility/EventSystem';
+import test_video_source from './assets/video/test_video_source.webm';
 
 function App() {
   const event_system = new EventSystem();
@@ -26,6 +27,15 @@ function App() {
           mqtt_server.send(MQTTFrontModeOut.ID, MQTTFrontModeOut.Right_MCU_Read_Action);
         }}>Turn right</button>
       </div>
+      
+      <video 
+        id="my-video"
+        className="video-js"
+        controls
+        preload="auto"
+        width="640"
+        height="264"><source src={test_video_source} type="video/webm" />
+      </video>
     </>
   )
 }
