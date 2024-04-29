@@ -1,0 +1,50 @@
+@use './variable.scss' as v;
+@use './font.scss' as font;
+
+.button_group {
+ display: flex;
+ gap: 1em;
+ flex-direction: column;
+}
+
+#app_page {
+  margin: 0 auto;
+  background: url("../texture/background/main_page_background.jpg");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+
+  height: 100vh;
+
+  max-width: 1280px;
+
+  @media (max-width: v.$mobile_max_screen) {
+    background-size:auto;
+  }
+
+  .app_action_comp {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+
+    h1 {
+      @include v.gradient_text(v.$color_gradient_start, v.$color_gradient_end);
+      font-family: NotoSansTC, Georgia, serif;
+    }
+
+    h3 {
+      @include v.gradient_text(v.$color_gradient_start, v.$color_gradient_end);
+      padding-top: 1em;
+      font-family: VantagePointNeo-Bold, Georgia, serif;
+    }
+
+    .button {
+      @include v.gradient_button(v.$color_gradient_start, v.$color_gradient_end);
+    }
+
+  }
+}

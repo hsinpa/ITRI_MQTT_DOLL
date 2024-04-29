@@ -32,7 +32,6 @@ export class MqttEventListener {
 
         for (let i in EVENT_LISTENER_LIST) {
             let event_id = this._get_cmd_callback(EVENT_LISTENER_LIST[i]);
-            console.log(event_id);
             this._event_dict.add(event_id);
             client.subscribe(event_id);
         }

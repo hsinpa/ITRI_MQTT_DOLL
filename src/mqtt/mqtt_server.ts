@@ -29,10 +29,10 @@ export class MQTTServer {
     }
 
     connect(url: string) {
-        if (this._mqtt_client != undefined) {
-            this.disconnect();
-            this._mqtt_client = undefined;
+        if (this._mqtt_client != undefined && !this._mqtt_client.disconnected) {
+            return;
         }
+
         this._mqtt_client = mqtt.default.connect(url);
         this._mqtt_listener = new MqttEventListener(this._mqtt_client, this._event_system, this.get_mqtt_cmd.bind(this));
 
@@ -53,6 +53,7 @@ export class MQTTServer {
 
     public disconnect() {
         this._mqtt_client?.end();
+        this._mqtt_client = undefined;
     }
 
     public get_mqtt_cmd(cmd_message_id: string) {
