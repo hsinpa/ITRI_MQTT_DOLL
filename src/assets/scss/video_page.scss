@@ -1,0 +1,27 @@
+@use './variable.scss' as v;
+@use './font.scss' as font;
+
+#video_page {  
+    margin: 0 auto;
+    max-width: 1280px;  
+
+    .video_content {
+        margin-top: 2em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    iframe {
+        height:512px;
+        width:100%;
+        border:none;
+        overflow:hidden;
+    }
+
+    .video_actions {
+        display: flex;
+        gap:1em;
+    }
+}

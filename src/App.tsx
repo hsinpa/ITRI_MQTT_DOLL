@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 
 function App({event_system, mqtt_server}: {event_system: EventSystem, mqtt_server: MQTTServer}) {
-  mqtt_server.connect(API.MQTT_URL);
+  // mqtt_server.connect(API.MQTT_URL);
 
 
   return (
@@ -16,7 +16,7 @@ function App({event_system, mqtt_server}: {event_system: EventSystem, mqtt_serve
       <div className='app_action_comp'>
         <h1 className='title is-1 has-text-weight-bold'>高齡照顧數位輔助</h1>
         <h3 className='subtitle is-6 has-text-weight-bold'>Senior care digital assistance</h3>
-        <Link className='button' to='#'>開始</Link>
+        <Link className='button' to='/action_page'>開始</Link>
       </div>
       {/* <div className='button_group'>
         <button className='button' onClick={() => {
@@ -36,14 +36,6 @@ function App({event_system, mqtt_server}: {event_system: EventSystem, mqtt_serve
         }}>Turn right</button>
       </div> */}
       
-      {/* <video 
-        id="my-video"
-        className="video-js"
-        controls
-        preload="auto"
-        width="640"
-        height="264"><source src={test_video_source} type="video/webm" />
-      </video> */}
     </div>
   )
 }
