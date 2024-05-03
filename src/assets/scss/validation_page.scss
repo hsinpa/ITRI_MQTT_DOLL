@@ -1,0 +1,31 @@
+@use './variable.scss' as v;
+@use './font.scss' as font;
+
+#validation_page {  
+    .validation_content {
+        margin: 0 auto;
+        max-width: v.$max_width;  
+    
+        padding: 2em;
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .validation_component {
+        display: flex;
+        gap: 2em;
+        justify-content: left;
+        align-items: center;
+
+        .validation_label {
+            @include v.gradient_button(v.$color_gradient_start, v.$color_gradient_end);
+            padding: 0.4em 1.5em;    
+        }
+
+        img {
+            width: 3em;
+            height: 3em;
+        }
+    }
+}

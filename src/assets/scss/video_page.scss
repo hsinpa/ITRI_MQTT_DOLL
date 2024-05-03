@@ -2,10 +2,10 @@
 @use './font.scss' as font;
 
 #video_page {  
-    margin: 0 auto;
-    max-width: 1280px;  
-
     .video_content {
+        margin: 0 auto;
+        max-width: v.$max_width;  
+    
         margin-top: 2em;
         display: flex;
         flex-direction: column;
@@ -18,6 +18,10 @@
         width:100%;
         border:none;
         overflow:hidden;
+
+        @media (max-width: v.$mobile_max_screen) {
+            height:256px;
+        }
     }
 
     .video_actions {

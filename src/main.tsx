@@ -10,8 +10,22 @@ import EventSystem from './utility/EventSystem.ts';
 import { MQTTServer } from './mqtt/mqtt_server.ts';
 import { ActionPage } from './page/material_selection/action_selection.tsx';
 import { MaterialSelectionPage } from './page/material_selection/material_selection.tsx';
+import { MaterialDetailPage } from './page/material_selection/material_detail_selection.tsx';
 import { EducationVideoPage } from './page/video/education_video.tsx';
 import { API } from './data/static_share_varaible.ts';
+import { ActionValidationPage } from './page/action_validation/action_validation.tsx';
+import i18next from 'i18next';
+import zh_tw_lang from './assets/language/zh_tw.json';
+
+i18next.init({
+  lng: 'zh_tw',
+  fallbackLng: 'zh_tw',
+  resources: {
+    zh_tw: {
+      translation: zh_tw_lang
+    }
+  }
+});
 
 const event_system = new EventSystem();
 const mqtt_server = new MQTTServer(event_system);
@@ -30,11 +44,19 @@ const router = createHashRouter([
     path: "/material_page",
     element: <MaterialSelectionPage/>,
   },
-
+  {
+    path: "/detail_page",
+    element: <MaterialDetailPage/>,
+  },
   {
     path: "/education_video",
     element: <EducationVideoPage event_system={event_system} mqtt_server={mqtt_server}/>,
-  },]);
+  },
+  {
+    path: "/action_validation",
+    element: <ActionValidationPage event_system={event_system} mqtt_server={mqtt_server}/>,
+  },
+]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

@@ -1,7 +1,7 @@
 @use './font.scss' as font;
 
-$mobile_max_screen: 900px;
-
+$mobile_max_screen: 800px;
+$max_width: 1280px;
 
 $color_gradient_start: #3864ff;
 $color_gradient_end: #8f00ff;
@@ -18,7 +18,7 @@ $color_gradient_end: #8f00ff;
 @mixin gradient_button($color_start, $end) {
     background: $color_start;
     background: linear-gradient(145deg, $color_start 0%, $end 100%);
-    
+    border-radius: 5px;
     &:hover {
         color: rgb(197, 197, 197);
     }

@@ -1,9 +1,10 @@
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { PageHeader } from "../page_header";
 import '../../assets/scss/video_page.scss'
 import EventSystem from "../../utility/EventSystem";
 import { MQTTServer } from "../../mqtt/mqtt_server";
 import { MQTTFrontModeOut } from "../../data/static_share_varaible";
+import i18next from "i18next";
 
 export const EducationVideoPage = function({event_system, mqtt_server}: {event_system: EventSystem, mqtt_server: MQTTServer}) {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -11,18 +12,21 @@ export const EducationVideoPage = function({event_system, mqtt_server}: {event_s
 
     if (video_name == null) video_name = "教學影片";
 
+    let to_address = `/action_validation?name=${video_name}`;
+    
     return (
         <div id="video_page">
-            <PageHeader title={video_name}></PageHeader>
+            <PageHeader title={i18next.t(video_name)}></PageHeader>
 
             <div className="video_content">
                 <iframe src="https://player.vimeo.com/video/941599033?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" title="test_video_source"></iframe>
             
                 <script src="https://player.vimeo.com/api/player.js"></script>
 
-
                 <div className="video_actions">
-                    <button className='button' onClick={() => {
+                    <Link to={to_address} className='button'>跳過</Link>
+
+                    {/* <button className='button' onClick={() => {
                         mqtt_server.send(MQTTFrontModeOut.ID, MQTTFrontModeOut.Idle);
                     }}>Back to default setting</button>
 
@@ -32,7 +36,7 @@ export const EducationVideoPage = function({event_system, mqtt_server}: {event_s
 
                     <button className='button' onClick={() => {
                         mqtt_server.send(MQTTFrontModeOut.ID, MQTTFrontModeOut.Right_MCU_Read_Action);
-                        }}>Turn right</button>
+                        }}>Turn right</button> */}
                 </div>
             </div>
         </div>
