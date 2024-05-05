@@ -1,10 +1,13 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import '../../assets/scss/material_page.scss'
 import { PageHeader } from '../page_header'
-import { MQTT_Action_Table, MaterialDetailsLookUp, Material_Table } from '../../data/mqtt_action_table';
+import { MQTT_Action_Name, MaterialDetailsLookUp, Material_Table } from '../../data/mqtt_action_table';
 import i18next from 'i18next';
+import EventSystem from '../../utility/EventSystem';
+import { MQTTServer } from '../../mqtt/mqtt_server';
+import { useEffect } from 'react';
 
-export const MaterialDetailPage = function() {
+export const MaterialDetailPage = function({event_system, mqtt_server}: {event_system: EventSystem, mqtt_server: MQTTServer}) {
 
     let [searchParams, setSearchParams] = useSearchParams();
     let material_name = searchParams.get('name');
@@ -13,7 +16,11 @@ export const MaterialDetailPage = function() {
 
     let material_detail_list = MaterialDetailsLookUp.get(material_name);
     if (material_detail_list == null) material_detail_list = [];
-
+    
+    useEffect(() => {
+        mqtt_server.to_default();
+    }, []);
+    
     return (
         <>
         <PageHeader title={i18next.t(material_name)}></PageHeader>

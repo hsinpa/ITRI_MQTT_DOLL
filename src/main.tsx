@@ -38,15 +38,15 @@ const router = createHashRouter([
   },
   {
     path: "/action_page",
-    element: <ActionPage/>,
+    element: <ActionPage event_system={event_system} mqtt_server={mqtt_server}/>,
   },
   {
     path: "/material_page",
-    element: <MaterialSelectionPage/>,
+    element: <MaterialSelectionPage event_system={event_system} mqtt_server={mqtt_server}/>,
   },
   {
     path: "/detail_page",
-    element: <MaterialDetailPage/>,
+    element: <MaterialDetailPage event_system={event_system} mqtt_server={mqtt_server}/>,
   },
   {
     path: "/education_video",
@@ -59,7 +59,7 @@ const router = createHashRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  //<React.StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>,
+  //</React.StrictMode>
 )

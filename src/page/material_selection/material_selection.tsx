@@ -3,8 +3,15 @@ import '../../assets/scss/material_page.scss'
 import { PageHeader } from '../page_header'
 import i18next from 'i18next'
 import { Material_Table } from '../../data/mqtt_action_table'
+import { MQTTServer } from '../../mqtt/mqtt_server'
+import EventSystem from '../../utility/EventSystem'
+import { useEffect } from 'react'
 
-export const MaterialSelectionPage = function() {
+export const MaterialSelectionPage = function({event_system, mqtt_server}: {event_system: EventSystem, mqtt_server: MQTTServer}) {
+    
+    useEffect(() => {
+        mqtt_server.to_default();
+    }, []);
 
     return (
         <>

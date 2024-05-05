@@ -2,6 +2,7 @@ import * as mqtt from 'mqtt';
 import { MCUResultInEvent } from '../data/static_flow_variable';
 import EventSystem from '../utility/EventSystem';
 import { MqttEventListener } from './mqtt_listener';
+import { MQTTFrontModeOut } from '../data/static_share_varaible';
 
 const EVENT_LISTENER_LIST = [
     MCUResultInEvent.Body,
@@ -40,9 +41,15 @@ export class MQTTServer {
             console.log("Connect is fun");
         });
 
-        this._mqtt_client.on("message", (topic, message) => {
-            console.log(topic, message.toString());
+        this._mqtt_client.on("message", (topic, message, packet) => {
+            //console.log(topic, message.toString());
+
+            this._mqtt_listener?.on_message(topic, message, packet);
         });          
+    }
+
+    public to_default() {
+        this.send(MQTTFrontModeOut.ID, MQTTFrontModeOut.Idle);
     }
 
     public send(command_id: string, command_value: number) {
