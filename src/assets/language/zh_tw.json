@@ -11,5 +11,6 @@
     "teaching_material": "培訓教材",
     "custom_material": "自訂教材",
     "skip": "跳過",
-    "start": "開始"
+    "start": "開始",
+    "stage_complete": "訓練完成, 五秒後返回選擇介面"
 }

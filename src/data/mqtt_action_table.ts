@@ -30,21 +30,18 @@ export const MaterialDetailsLookUp = new Map<string, string[]> ([
     [Material_Table.pat_back, []]
 ]);
 
-
-
-
 export const MQTT_Action_Validation = new Map<string, Validation_Type[]>(
 [
     [    MQTT_Action_Name.roll_over_left, [
         {
             'name': '抬手',
-            'validation_list': [MCUResultInEvent.RightArmFlex, MCUResultInEvent.RightArmIMU],
+            'validation_list': [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
             'weight': 1,
             'is_complete': false
         },
         {
             'name': '抬腳',
-            'validation_list': [MCUResultInEvent.RightKneeFlex, MCUResultInEvent.RightKneeIMU],
+            'validation_list': [MCUResultInEvent.LeftKneeFlex, MCUResultInEvent.LeftKneeIMU],
             'weight': 1,
             'is_complete': false
         },
@@ -59,13 +56,13 @@ export const MQTT_Action_Validation = new Map<string, Validation_Type[]>(
         MQTT_Action_Name.roll_over_right,  [
         {
             'name': '抬手',
-            'validation_list': [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
+            'validation_list': [MCUResultInEvent.RightArmFlex, MCUResultInEvent.RightArmIMU],
             'weight': 1,
             'is_complete': false
         },
         {
             'name': '抬腳',
-            'validation_list': [MCUResultInEvent.LeftKneeFlex, MCUResultInEvent.LeftKneeIMU],
+            'validation_list': [MCUResultInEvent.RightKneeFlex, MCUResultInEvent.RightKneeIMU],
             'weight': 1,
             'is_complete': false
         },

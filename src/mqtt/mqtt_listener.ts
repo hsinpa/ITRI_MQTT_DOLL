@@ -38,13 +38,7 @@ export class MqttEventListener {
     }
 
     public on_message(topic: string, payload: Buffer, packet: IPublishPacket) {
-        console.log('on message ' + topic);
-        
-        if (topic in this._event_dict) {
-            console.log(payload);
-            console.log(packet);
-
-            this._event_sytem.Notify(topic, payload);
-        }
+        console.log('on message ' + topic + ", " + payload);
+        this._event_sytem.Notify(topic, payload);
     }
 }

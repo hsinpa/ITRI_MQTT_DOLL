@@ -31,10 +31,9 @@ class EventSystem {
 
     Notify(event_id : string, parameters? : any) {
         if (this._events.hasOwnProperty(event_id)) {
-
             let eventLength = this._events[event_id].length;
             for (let i = 0; i < eventLength; i++) {
-                this._events[event_id][i](parameters);
+                this._events[event_id][i](event_id, parameters);
             }
         }  
     }

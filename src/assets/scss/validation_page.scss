@@ -28,4 +28,15 @@
             height: 3em;
         }
     }
+
+    .complete_notification {
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, -25%);
+        max-width: 30em;
+
+        color: white;
+        font-family: NotoSansTC, Georgia, serif;
+    }
 }
