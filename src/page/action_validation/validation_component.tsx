@@ -12,5 +12,5 @@ export const ValidationComponent = function({name, id, on_click, is_success} : {
             <div className="validation_label" onClick={() => on_click(id) }>{name}</div>
             <img src={icon}></img>
         </div>
-    )
+    ) 
 }

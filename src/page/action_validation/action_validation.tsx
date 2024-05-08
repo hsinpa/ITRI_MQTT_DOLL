@@ -89,7 +89,7 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
 
         if (validation_result == null) return;
         
-        if (validation_result.score >= 1.5) {
+        if (validation_result.score >= 2.5) {
             validationState[validation_result.index].is_complete = true;
             setValidationState([...validationState])
         }
