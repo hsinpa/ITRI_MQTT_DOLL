@@ -27,6 +27,12 @@
             width: 3em;
             height: 3em;
         }
+
+        .validation_progress {
+            display: flex;
+            gap: 0.5em;
+            align-items: center;    
+        }
     }
 
     .complete_notification {

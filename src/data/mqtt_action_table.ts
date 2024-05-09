@@ -22,6 +22,7 @@ export interface Validation_Type {
     name: string,
     validation_list: string[],
     weight: number,
+    score: number,
     is_complete: boolean
 }
 
@@ -37,19 +38,22 @@ export const MQTT_Action_Validation = new Map<string, Validation_Type[]>(
             'name': '抬手',
             'validation_list': [MCUResultInEvent.RightArmFlex, MCUResultInEvent.RightArmIMU],
             'weight': 1,
-            'is_complete': false
+            'is_complete': false,
+            'score': 0
         },
         {
             'name': '抬腳',
             'validation_list': [MCUResultInEvent.RightKneeFlex, MCUResultInEvent.RightKneeIMU],
             'weight': 1,
-            'is_complete': false
+            'is_complete': false,
+            'score': 0
         },
         {
             'name': '翻身',
             'validation_list': [MCUResultInEvent.Body, MCUResultInEvent.Head],
             'weight': 1,
-            'is_complete': false
+            'is_complete': false,
+            'score': 0
         } ]
     ],
     [
@@ -58,19 +62,22 @@ export const MQTT_Action_Validation = new Map<string, Validation_Type[]>(
             'name': '抬手',
             'validation_list': [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
             'weight': 1,
-            'is_complete': false
+            'is_complete': false,
+            'score': 0
         },
         {
             'name': '抬腳',
             'validation_list': [MCUResultInEvent.LeftKneeFlex, MCUResultInEvent.LeftKneeIMU],
             'weight': 1,
-            'is_complete': false
+            'is_complete': false,
+            'score': 0
         },
         {
             'name': '翻身',
             'validation_list': [MCUResultInEvent.Body, MCUResultInEvent.Head],
             'weight': 1,
-            'is_complete': false
+            'is_complete': false,
+            'score': 0
         } ]
     ]
 ]);

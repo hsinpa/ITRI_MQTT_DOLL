@@ -5,6 +5,8 @@ import EventSystem from "../../utility/EventSystem";
 import { MQTTServer } from "../../mqtt/mqtt_server";
 import { MQTTFrontModeOut } from "../../data/static_share_varaible";
 import i18next from "i18next";
+import { useEffect } from "react";
+import { MQTT_Action_MQTT } from "../../data/mqtt_action_table";
 
 export const EducationVideoPage = function({event_system, mqtt_server}: {event_system: EventSystem, mqtt_server: MQTTServer}) {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -14,6 +16,12 @@ export const EducationVideoPage = function({event_system, mqtt_server}: {event_s
 
     let to_address = `/action_validation?name=${video_name}`;
     
+    useEffect(() => {
+        let action_id = MQTT_Action_MQTT.get(video_name);
+        if (action_id != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTFrontModeOut.ID), action_id);            
+    }, []);
+
+
     return (
         <div id="video_page">
             <PageHeader title={i18next.t(video_name)}></PageHeader>

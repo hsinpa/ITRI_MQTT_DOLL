@@ -88,3 +88,9 @@ export const MQTTTeachModeIn = Object.freeze({
 export function get_mqtt_cmd(client_id: string, cmd_message_id: string) {
     return cmd_message_id.replace("{0}", client_id);
 }
+
+export const DollIDList = ['1', '2', '3', '4', '5', '6']
+
+export const LocalStorageKey = Object.freeze({
+    DOLL_ID: 'doll_id'
+});

@@ -1,7 +1,8 @@
 import no_icon from '../../assets/texture/sprite/icon_no.png';
 import yes_icon from '../../assets/texture/sprite/icon_yes.png';
 
-export const ValidationComponent = function({name, id, on_click, is_success} : {name: string, id: number, on_click: (id: number) => void, is_success: boolean}) {
+export const ValidationComponent = function({name, id, on_click, is_success, progress} : 
+                                            {name: string, id: number, on_click: (id: number) => void, is_success: boolean, progress: number}) {
 
     let icon = (is_success) ? yes_icon : no_icon;
 
@@ -10,7 +11,8 @@ export const ValidationComponent = function({name, id, on_click, is_success} : {
     return (
         <div className="validation_component" data-id={id}>
             <div className="validation_label" onClick={() => on_click(id) }>{name}</div>
-            <img src={icon}></img>
+            <div className="validation_progress" ><img src={icon}></img> <span>{ Math.round(progress * 100) }%</span></div>
+            
         </div>
     ) 
 }

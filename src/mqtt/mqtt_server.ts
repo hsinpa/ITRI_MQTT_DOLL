@@ -2,7 +2,7 @@ import * as mqtt from 'mqtt';
 import { MCUResultInEvent } from '../data/static_flow_variable';
 import EventSystem from '../utility/EventSystem';
 import { MqttEventListener } from './mqtt_listener';
-import { MQTTFrontModeOut } from '../data/static_share_varaible';
+import { LocalStorageKey, MQTTFrontModeOut } from '../data/static_share_varaible';
 
 const EVENT_LISTENER_LIST = [
     MCUResultInEvent.Body,
@@ -25,8 +25,20 @@ export class MQTTServer {
     private _event_system: EventSystem;
     private _client_id: string = "1";
 
+    get client_id(): string {
+        return this._client_id;
+    }
+
     constructor(event_system: EventSystem) {
         this._event_system = event_system;
+
+        let doll_id = localStorage.getItem(LocalStorageKey.DOLL_ID);
+        if (doll_id !=  null) this._client_id = doll_id;
+    }
+
+    set_client_id(id: string) {
+        this._client_id = id;
+        localStorage.setItem(LocalStorageKey.DOLL_ID, this._client_id);
     }
 
     connect(url: string) {
@@ -54,8 +66,11 @@ export class MQTTServer {
 
     public send(command_id: string, command_value: number) {
         if (this._mqtt_client == null) return;
+        
+        let cmd_id =  this.get_mqtt_cmd(command_id);
+        console.log(`Event Send ${cmd_id}, ${command_value}`);
 
-        this._mqtt_client.publish(this.get_mqtt_cmd(command_id),  command_value.toString() );
+        this._mqtt_client.publish(cmd_id,  command_value.toString() );
     }
 
     public disconnect() {

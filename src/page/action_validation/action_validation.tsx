@@ -8,7 +8,7 @@ import { MQTT_Action_MQTT, MQTT_Action_Validation, Validation_Type } from "../..
 import { useEffect, useState } from "react";
 import i18next, { t } from "i18next";
 import { MQTTFrontModeOut } from "../../data/static_share_varaible";
-import { CancellationToken, DoDelayAction } from "../../utility/UtilityFunc";
+import { CancellationToken, Clamp, DoDelayAction } from "../../utility/UtilityFunc";
 
 interface Validation_State_Result {
     index: number,
@@ -34,9 +34,7 @@ let deregister_event = function(event_system: EventSystem, mqtt_server: MQTTServ
     });
 }
 
-let get_validation_state = function(target_validation_id: string, states: Validation_Type[], score_table: Map<string, number>, mqtt_server: MQTTServer): Validation_State_Result | null {
-    console.log("get_validation_state " + target_validation_id);
-
+let get_validation_state = function(target_validation_id: string, states: Validation_Type[], score_table: Map<string, number>, mqtt_server: MQTTServer): Validation_State_Result {
     for (let s_index = 0; s_index < states.length; s_index++) {
         let average_score = 0;
         let validation_list = states[s_index].validation_list.map(x => mqtt_server.get_mqtt_cmd(x));
@@ -57,7 +55,7 @@ let get_validation_state = function(target_validation_id: string, states: Valida
         return {score: average_score, index: s_index};
     }
 
-    return null;
+    return {score: 0, index: -1};
 }
 
 let cancellation_token: CancellationToken = {is_cancel: false};
@@ -77,26 +75,28 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
     const [validationFulfilled, setValidationFulfilled] = useState(false);
 
     let on_message_event = function(event_id: string, message: Buffer) {
-        let score = parseFloat(message.toString());
-
-        let current_score = validation_score_map.get(event_id);
-        
-        // If previous score is higher than new score, just ignore
-        if (current_score != undefined && current_score >= score) return; 
-        
-        validation_score_map.set(event_id, parseFloat(message.toString()));
+        let max_score = 3;
         let validation_result = get_validation_state(event_id, validationState, validation_score_map, mqtt_server);
 
-        if (validation_result == null) return;
+        if (validation_result.index < 0) return;
+
+        let score = parseFloat(message.toString());
+            score = Clamp(score, 0, max_score);
         
-        if (validation_result.score >= 2.5) {
-            validationState[validation_result.index].is_complete = true;
-            setValidationState([...validationState])
-        }
+        // If the quest is complete, than ignore
+        if (validationState[validation_result.index].is_complete) return; 
+        
+        validation_score_map.set(event_id, score);
+        validation_result = get_validation_state(event_id, validationState, validation_score_map, mqtt_server);
+        
+        validationState[validation_result.index].score = validation_result.score / max_score;
+        validationState[validation_result.index].is_complete = Math.round(validation_result.score) >= 3;
+        setValidationState([...validationState]);
     }
 
     let on_validation_debug_click = function(id: number) {
         validationState[id].is_complete = true;
+        validationState[id].score = 1;
         setValidationState([...validationState])
     }
 
@@ -143,10 +143,13 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
             <PageHeader title={i18next.t(material_name)}></PageHeader>
 
             <div className="validation_content">
-
             {
                 validationState.map((x,i)=>{
-                    return <ValidationComponent name={x.name} id={i} key={i} on_click={on_validation_debug_click} is_success={x.is_complete}></ValidationComponent>
+                    return <ValidationComponent name={x.name} id={i} key={i}
+                    on_click={on_validation_debug_click} 
+                    is_success={x.is_complete}
+                    progress={x.score}
+                    ></ValidationComponent>
                 })
             }
 
