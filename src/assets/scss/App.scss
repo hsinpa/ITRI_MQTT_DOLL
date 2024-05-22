@@ -13,9 +13,8 @@
   background-repeat: no-repeat;
   background-position: center bottom;
   background-size: contain;
-
+  
   height: 100vh;
-
   max-width: v.$max_width;  
 
   @media (max-width: v.$mobile_max_screen) {

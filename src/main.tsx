@@ -2,6 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import 'bulma/css/bulma.min.css'
+import './assets/scss/global.scss'
+
 import {
   createHashRouter,
   RouterProvider,
