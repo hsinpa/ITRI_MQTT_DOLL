@@ -8,11 +8,23 @@ export const ValidationComponent = function({name, id, on_click, is_success, pro
 
     console.log(`name ${name}, is_success ${is_success}`)
 
+    const progress_value = Math.round(progress * 100);
+    const progress_text = progress_value + "%";
+
+    const progress_style = {
+        width: progress_text
+    }
+
+
     return (
         <div className="validation_component" data-id={id}>
             <div className="validation_label" onClick={() => on_click(id) }>{name}</div>
-            <div className="validation_progress" ><img src={icon}></img> <span>{ Math.round(progress * 100) }%</span></div>
-            
+            <div className='progress_bar'>
+                <progress className="progress is-large" value={progress_value} max="100"></progress>
+                <span>{progress_text}</span>
+            </div>
+            <div className="validation_progress" ><img src={icon}></img> <span>{ progress_text }</span></div>
+
         </div>
     ) 
 }

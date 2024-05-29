@@ -82,9 +82,16 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
 
         let score = parseFloat(message.toString());
             score = Clamp(score, 0, max_score);
-        
+
         // If the quest is complete, than ignore
-        if (validationState[validation_result.index].is_complete) return; 
+        if (validationState[validation_result.index].is_complete) {
+            let previous_event_score = validation_score_map.get(event_id);
+
+            if (previous_event_score != null && score < previous_event_score) {
+                return;
+            }
+            
+        }
         
         validation_score_map.set(event_id, score);
         validation_result = get_validation_state(event_id, validationState, validation_score_map, mqtt_server);

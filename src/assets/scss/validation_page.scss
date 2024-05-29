@@ -23,15 +23,50 @@
             padding: 0.4em 1.5em;    
         }
 
-        img {
-            width: 3em;
-            height: 3em;
-        }
-
         .validation_progress {
             display: flex;
             gap: 0.5em;
             align-items: center;    
+            width: 2em;
+            height: 2em;
+            
+            span {
+                display: none;
+            }
+            @media (max-width: v.$mobile_max_screen) {
+                span {
+                    display: block;
+                }
+            }
+        }
+
+        progress {
+            --bulma-progress-bar-background-color: white;
+
+            --bulma-progress-value-background-color: #5a3dff;
+            border: solid 2px #c5a9ff; 
+            height: 2.5em;   
+            margin: 0 auto;
+        }
+
+        .progress_bar {
+            flex-grow: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;  
+            flex-direction: row;
+            position: relative;
+
+            span {
+                position: absolute;
+                color: rgb(200, 200, 200);
+                font-weight: bold;
+                left:1em;
+            }
+
+            @media (max-width: v.$mobile_max_screen) {
+                display: none;
+            }
         }
     }
 

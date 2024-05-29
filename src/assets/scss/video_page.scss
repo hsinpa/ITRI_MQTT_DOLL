@@ -14,18 +14,24 @@
     }
 
     iframe {
-        height:512px;
-        width:100%;
         border:none;
         overflow:hidden;
-
+        width: 100%;
+        height: 512px;
+  
         @media (max-width: v.$mobile_max_screen) {
             height:256px;
+            width: 100%;
         }
     }
 
     .video_actions {
         display: flex;
         gap:1em;
+        
+        .button {
+            @include v.gradient_button(v.$color_gradient_start, v.$color_gradient_end);
+            width: 7em;
+        }
     }
 }

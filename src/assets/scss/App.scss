@@ -9,41 +9,69 @@
 
 #app_page {
   margin: 0 auto;
-  background: url("../texture/background/main_page_background.jpg");
+  background: url("../texture/background/login_background.jpg");
   background-repeat: no-repeat;
   background-position: center bottom;
   background-size: contain;
   
   height: 100vh;
   max-width: v.$max_width;  
-
-  @media (max-width: v.$mobile_max_screen) {
-    background-size:auto;
-  }
+  padding: 0em 1.2em;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 
   .app_action_comp {
     display: flex;
-    align-items: center;
+    align-items: left;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
     height: 100%;
-    text-align: center;
+    text-align: left;
+    position: relative;
+    right: 5em;
+    gap:0.1em;
 
     h1 {
       @include v.gradient_text(v.$color_gradient_start, v.$color_gradient_end);
       font-family: NotoSansTC, Georgia, serif;
+      text-align: left;
+
     }
 
     h3 {
       @include v.gradient_text(v.$color_gradient_start, v.$color_gradient_end);
-      padding-top: 1em;
+      padding-top: 0.5em;
       font-family: VantagePointNeo-Bold, Georgia, serif;
+      text-align: left;
+    }
+
+    img {
+      width:10em;
     }
 
     .button {
-      @include v.gradient_button(v.$color_gradient_start, v.$color_gradient_end);
+      background-color: #5600a9;
+      color: white;
+      border-radius: 1.6em;
+      font-family: NotoSansTC, Georgia, serif;
+      margin-top: 1em;
+      padding: 0.8em 0.1em;
     }
 
+    .forget_password {
+      text-align: right;
+      text-decoration: underline;
+    }
+  }
+
+  @media (max-width: v.$mobile_max_screen) {
+    background-size:auto;
+    justify-content: center;
+
+    .app_action_comp {
+      right: 0em;
+      width: 100%;
+    }
   }
 }

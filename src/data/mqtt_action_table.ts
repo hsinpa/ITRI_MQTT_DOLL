@@ -4,6 +4,11 @@ import { MQTTFrontModeOut } from "./static_share_varaible";
 export const Material_Table = Object.freeze({
     'roll_over':'roll_over',
     'pat_back':'pat_back',
+
+    "wheelchair":"wheelchair",
+    "out_of_bed":"out_of_bed",
+    "change_cloth":"change_cloth",
+    "cleaning":"cleaning",
 });
 
 export const MQTT_Action_Name = Object.freeze({
@@ -16,6 +21,11 @@ export const MQTT_Action_Name = Object.freeze({
 export const MQTT_Action_MQTT =  new Map<string, number> ([
     [MQTT_Action_Name.roll_over_left, MQTTFrontModeOut.Left_MCU_Read_Action],
     [MQTT_Action_Name.roll_over_right, MQTTFrontModeOut.Right_MCU_Read_Action],
+]);
+
+export const MQTT_Material_Video =  new Map<string, string> ([
+    [Material_Table.roll_over, "6Ayxz5p7GBs"],
+    [Material_Table.pat_back, "-iuVNwn6NxY"],
 ]);
 
 export interface Validation_Type {

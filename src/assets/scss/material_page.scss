@@ -54,12 +54,12 @@
 
 #material_selection_page {
     margin: 0 auto;
-    background: url("../texture/background/class_selection_background.jpg");
+    background: url("../texture/background/material_selection_background_v2.jpg");
     background-repeat: no-repeat;
     background-position: center bottom;
     background-size: contain;
   
-    height: 100vh;
+    height: 92vh;
   
     max-width: v.$max_width;  
 
@@ -67,9 +67,13 @@
         background-size:auto;
     }
 
+    .render_detail_comp {
+        position: absolute;
+    }
+
     .material_selection_comp {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         gap: 1em 3em;
         position: absolute;
         left: 50%;
@@ -83,7 +87,18 @@
 
         .button {
             @include v.gradient_button(v.$color_gradient_start, v.$color_gradient_end);
-            
+            width: 7em;
+        }
+
+        .expand {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap:0.1em;
+            box-shadow: 1px 1px 3px gray;
+            background-color: white;
+            z-index: 10;
+            border-radius:0.5em;
         }
     }
 }
