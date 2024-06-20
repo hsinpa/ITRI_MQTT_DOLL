@@ -18,6 +18,12 @@ export const MQTT_Action_Name = Object.freeze({
     'pat_back':'pat_back',
 });
 
+export const MQTT_State_Name = Object.freeze({
+    'hand':'hand',
+    'knee':'knee',
+    'body':'body',
+});
+
 export const MQTT_Action_MQTT =  new Map<string, number> ([
     [MQTT_Action_Name.roll_over_left, MQTTFrontModeOut.Left_MCU_Read_Action],
     [MQTT_Action_Name.roll_over_right, MQTTFrontModeOut.Right_MCU_Read_Action],
@@ -28,12 +34,10 @@ export const MQTT_Material_Video =  new Map<string, string> ([
     [Material_Table.pat_back, "-iuVNwn6NxY"],
 ]);
 
-export interface Validation_Type {
+export interface Validation_Score {
     name: string,
     validation_list: string[],
-    weight: number,
     score: number,
-    is_complete: boolean
 }
 
 export const MaterialDetailsLookUp = new Map<string, string[]> ([
@@ -41,52 +45,40 @@ export const MaterialDetailsLookUp = new Map<string, string[]> ([
     [Material_Table.pat_back, []]
 ]);
 
-export const MQTT_Action_Validation = new Map<string, Validation_Type[]>(
+export const MQTT_Action_Validation = new Map<string, Validation_Score[]>(
 [
     [    MQTT_Action_Name.roll_over_left, [
         {
-            'name': '抬手',
+            'name': MQTT_State_Name.hand,
             'validation_list': [MCUResultInEvent.RightArmFlex, MCUResultInEvent.RightArmIMU],
-            'weight': 1,
-            'is_complete': false,
             'score': 0
         },
         {
-            'name': '抬腳',
+            'name': MQTT_State_Name.knee,
             'validation_list': [MCUResultInEvent.RightKneeFlex, MCUResultInEvent.RightKneeIMU],
-            'weight': 1,
-            'is_complete': false,
             'score': 0
         },
         {
-            'name': '翻身',
-            'validation_list': [MCUResultInEvent.Body, MCUResultInEvent.Head],
-            'weight': 1,
-            'is_complete': false,
+            'name': MQTT_State_Name.body,
+            'validation_list': [MCUResultInEvent.Body],
             'score': 0
         } ]
     ],
     [
         MQTT_Action_Name.roll_over_right,  [
         {
-            'name': '抬手',
+            'name': MQTT_State_Name.hand,
             'validation_list': [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
-            'weight': 1,
-            'is_complete': false,
             'score': 0
         },
         {
-            'name': '抬腳',
+            'name': MQTT_State_Name.knee,
             'validation_list': [MCUResultInEvent.LeftKneeFlex, MCUResultInEvent.LeftKneeIMU],
-            'weight': 1,
-            'is_complete': false,
             'score': 0
         },
         {
-            'name': '翻身',
-            'validation_list': [MCUResultInEvent.Body, MCUResultInEvent.Head],
-            'weight': 1,
-            'is_complete': false,
+            'name': MQTT_State_Name.body,
+            'validation_list': [MCUResultInEvent.Body],
             'score': 0
         } ]
     ]

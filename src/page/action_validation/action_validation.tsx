@@ -4,28 +4,32 @@ import EventSystem from "../../utility/EventSystem";
 import { PageHeader } from "../page_header";
 import { ValidationComponent } from "./validation_component";
 import '../../assets/scss/validation_page.scss';
-import { MQTT_Action_MQTT, MQTT_Action_Validation, Validation_Type } from "../../data/mqtt_action_table";
+import { MQTT_Action_MQTT, MQTT_Action_Validation, Validation_Score } from "../../data/mqtt_action_table";
 import { useEffect, useState } from "react";
 import i18next, { t } from "i18next";
 import { MQTTFrontModeOut } from "../../data/static_share_varaible";
 import { CancellationToken, Clamp, DoDelayAction } from "../../utility/UtilityFunc";
+import { MQTT_Action_Rules, Rule_Type } from "../../data/mqtt_action_rules";
+import { process_msg_event, rule_matching } from "./validation_utility";
+import { useUserInfoStore } from "./validation_zusland";
 
 interface Validation_State_Result {
     index: number,
     score: number,
 }
 
-let register_event = function(event_system: EventSystem, mqtt_server: MQTTServer , validation_list: Validation_Type[] | undefined, callback: any) {
+let local_val_state = '';
+
+let register_event = function(event_system: EventSystem, mqtt_server: MQTTServer , validation_list: Validation_Score[] | undefined, callback: any) {
     if (validation_list == undefined) return;
     validation_list.forEach(x=> {
         x.validation_list.forEach(event_id => {
-            //console.log('register_event ' + mqtt_server.get_mqtt_cmd(event_id));
             event_system.ListenToEvent(mqtt_server.get_mqtt_cmd(event_id), callback);
         });  
     });
 }
 
-let deregister_event = function(event_system: EventSystem, mqtt_server: MQTTServer, validation_list: Validation_Type[] | undefined, callback: any) {
+let deregister_event = function(event_system: EventSystem, mqtt_server: MQTTServer, validation_list: Validation_Score[] | undefined, callback: any) {
     if (validation_list == undefined) return;
     validation_list.forEach(x=> {
         x.validation_list.forEach(event_id => {
@@ -34,25 +38,34 @@ let deregister_event = function(event_system: EventSystem, mqtt_server: MQTTServ
     });
 }
 
-let get_validation_state = function(target_validation_id: string, states: Validation_Type[], score_table: Map<string, number>, mqtt_server: MQTTServer): Validation_State_Result {
-    for (let s_index = 0; s_index < states.length; s_index++) {
-        let average_score = 0;
-        let validation_list = states[s_index].validation_list.map(x => mqtt_server.get_mqtt_cmd(x));
+let get_validation_scores = function(target_validation_id: string, scores: Validation_Score[], 
+    score_table: Map<string, number>, mqtt_server: MQTTServer): Validation_State_Result {
+    console.log('score_table', score_table);
 
+    for (let s_index = 0; s_index < scores.length; s_index++) {
+
+        let validation_list = scores[s_index].validation_list.map(x => mqtt_server.get_mqtt_cmd(x));
+        
         if (validation_list.findIndex((x) => x == target_validation_id) < 0) continue;
+        let min_score = score_table.get(validation_list[0]);
+        if (min_score == null) min_score = 0;
+
+        console.log(validation_list);
 
         for (let v_index = 0; v_index < validation_list.length; v_index++) {
             let validation_id = validation_list[v_index];
             let valid_score = score_table.get(validation_id);
+            console.log(validation_id);
+            console.log(valid_score);
 
-            if (valid_score == undefined) continue;
-
-            average_score += valid_score;
+            if (valid_score == undefined) 
+                valid_score = 0;
+            
+            min_score = Math.min(min_score, valid_score);
         }
+        console.log('min_score', min_score);
 
-        average_score /= validation_list.length;
-
-        return {score: average_score, index: s_index};
+        return {score: min_score, index: s_index};
     }
 
     return {score: 0, index: -1};
@@ -65,55 +78,96 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
     let material_name = searchParams.get('name');
 
     if (material_name == null) material_name = "動作判讀";
-    let validation_list = MQTT_Action_Validation.get(material_name);
-        validation_list = JSON.parse(JSON.stringify(validation_list));
+    let validation_table = MQTT_Action_Validation.get(material_name);
+        validation_table = JSON.parse(JSON.stringify(validation_table));
 
-    if (validation_list == null) validation_list = [];
+    let validation_rules = MQTT_Action_Rules.get(material_name);
+
+    if (validation_table == null) validation_table = [];
+    if (validation_rules == null) validation_rules = new Map();
+
     let validation_score_map = new Map<string, number>();
-    
-    const [validationState, setValidationState] = useState([...validation_list]);
+
+    const [validationScores, setValidationScores] = useState([...validation_table]);
     const [validationFulfilled, setValidationFulfilled] = useState(false);
 
-    let on_message_event = function(event_id: string, message: Buffer) {
-        let max_score = 3;
-        let validation_result = get_validation_state(event_id, validationState, validation_score_map, mqtt_server);
+    let process_rule = function(rule: Rule_Type) {
+        if (rule == null) return;
 
-        if (validation_result.index < 0) return;
+        console.log('process_rule', rule);
+        let index = validation_table.findIndex(x => x.name == local_val_state);
+ 
+        if (rule.type == 'warn') {
+            return;
+        }
+
+        if (rule.type == 'error') {
+            if (index > 0) local_val_state = ( validation_table[index - 1].name + '')
+            return;
+        }
+
+        if (index >= validation_table.length - 1) {
+            setValidationFulfilled(true);
+            return;
+        }
+        console.log('setValidationState', validation_table[index + 1].name);
+        local_val_state = validation_table[index + 1].name;
+    }
+
+    let on_message_event = function(event_id: string, message: Buffer) {
+        if (validationFulfilled) return;
+
+        console.log('validation_score_map', validation_score_map)
+        let revert_event_id = event_id.replace(mqtt_server.client_id, "{0}");
+
+        let max_score = 3;
+        let validation_scores = get_validation_scores(event_id, validationScores, validation_score_map, mqtt_server);
+        let rule = validation_rules.get(local_val_state);
+
+        console.log('rule', rule);
+
+        if (validation_scores.index < 0 || rule == null) return;
+        if (!process_msg_event(revert_event_id, rule)) return;
 
         let score = parseFloat(message.toString());
             score = Clamp(score, 0, max_score);
 
-        // If the quest is complete, than ignore
-        if (validationState[validation_result.index].is_complete) {
-            let previous_event_score = validation_score_map.get(event_id);
+        let original_score = validation_score_map.get(event_id);
+        let original_v_score = validationScores[validation_scores.index].score;
 
-            if (previous_event_score != null && score < previous_event_score) {
-                return;
-            }
-            
+        validation_score_map.set(event_id, score);
+
+        validation_scores = get_validation_scores(event_id, validationScores, validation_score_map, mqtt_server);
+        validationScores[validation_scores.index].score = validation_scores.score;
+
+        let rule_match_result = rule_matching(revert_event_id, local_val_state, rule, validationScores);
+        console.log('rule_match_result', rule_match_result);
+
+        if ((rule_match_result != null && rule_match_result.type != 'success')) {
+            if (original_score == undefined) original_score = 0; 
+
+            validation_score_map.set(event_id, original_score);
+            validationScores[validation_scores.index].score = original_v_score;
+
+            console.log('REVERT', event_id,  original_score);
+            return;
         }
         
-        validation_score_map.set(event_id, score);
-        validation_result = get_validation_state(event_id, validationState, validation_score_map, mqtt_server);
-        
-        validationState[validation_result.index].score = validation_result.score / max_score;
-        validationState[validation_result.index].is_complete = Math.round(validation_result.score) >= 3;
-        setValidationState([...validationState]);
+        validationScores[validation_scores.index].score = validation_scores.score;
+        setValidationScores([...validationScores]);
+
+        if (rule_match_result != null)
+            process_rule(rule_match_result);
     }
 
     let on_validation_debug_click = function(id: number) {
-        validationState[id].is_complete = true;
-        validationState[id].score = 1;
-        setValidationState([...validationState])
+        validationScores[id].score = 1;
+        setValidationScores([...validationScores])
     }
 
     let is_validations_fulfill = async function() {
-        let sum = validationState.reduce( (accumulator, currentValue) => accumulator + ((currentValue.is_complete) ? 1 : 0), 0);
-        
         // Finish
-        if (sum >= validationState.length && !validationFulfilled) {
-            setValidationFulfilled(true);
-            
+        if (validationFulfilled) {            
             console.log("Stage complete");
 
             await DoDelayAction(5000, cancellation_token);
@@ -126,24 +180,28 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
     useEffect(() => {
         console.log("ActionValidationPage");
         cancellation_token.is_cancel = false;
-        register_event(event_system, mqtt_server, validationState, on_message_event)
+        local_val_state = validation_table[0].name;
+        validation_score_map.clear();
+        register_event(event_system, mqtt_server, validationScores, on_message_event)
 
         let action_id = MQTT_Action_MQTT.get(material_name);
         if (action_id != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTFrontModeOut.ID), action_id);
 
         return () => {
+            validation_score_map.clear();
           console.log("cleaned up");
-          console.log(validation_list);
+          console.log(validation_table);
           cancellation_token.is_cancel = true;
+          local_val_state = '';
 
-          setValidationState([]);
-          deregister_event(event_system, mqtt_server, validationState, on_message_event);
+          setValidationScores([]);
+          deregister_event(event_system, mqtt_server, validationScores, on_message_event);
         };
     }, []);
     
     useEffect(() => {
         is_validations_fulfill();
-    }, [validationState]);
+    }, [validationScores]);
 
     return (
         <div id="validation_page">
@@ -151,20 +209,19 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
 
             <div className="validation_content">
             {
-                validationState.map((x,i)=>{
-                    return <ValidationComponent name={x.name} id={i} key={i}
+                validationScores.map((x,i)=>{
+                    return <ValidationComponent name={ i18next.t(x.name) } id={i} key={i}
                     on_click={on_validation_debug_click} 
-                    is_success={x.is_complete}
-                    progress={x.score}
+                    progress={x.score / 3}
                     ></ValidationComponent>
                 })
             }
 
             {
-                validationFulfilled && 
-                <div className="complete_notification notification is-success">
-                    {t("stage_complete")}
-                </div>
+                // validationFulfilled && 
+                // <div className="complete_notification notification is-success">
+                //     {t("stage_complete")}
+                // </div>
             }
             </div>
         </div>
