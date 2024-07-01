@@ -67,9 +67,67 @@ const Roll_Over_Left_Rules = new Map<string, Rule_Type[]>([
 ]);
 
 
+const Roll_Over_Right_Rules = new Map<string, Rule_Type[]>([
+    [MQTT_State_Name.hand,
+        [
+            {
+                score_id: MQTT_State_Name.hand,
+                matches: [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
+                message_id: '',
+                type: 'success',
+                operation: '==',
+                value: 3
+            },
+        ]
+    ],
+
+    [MQTT_State_Name.knee,
+        [
+            {
+                score_id: MQTT_State_Name.hand,
+                matches: [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
+                message_id: '',
+                type: 'error',
+                operation: '<',
+                value: 2
+            },
+            {
+                score_id: MQTT_State_Name.body,
+                matches: [MCUResultInEvent.Body],
+                message_id: '',
+                type: 'warn',
+                operation: '>',
+                value: 2
+            },
+            {
+                score_id: MQTT_State_Name.knee,
+                matches: [MCUResultInEvent.LeftKneeFlex, MCUResultInEvent.LeftKneeIMU],
+                message_id: '',
+                type: 'success',
+                operation: '==',
+                value: 3
+            }
+        ]
+    ],
+    [MQTT_State_Name.body,
+        [
+            {
+                score_id: MQTT_State_Name.body,
+                matches: [MCUResultInEvent.Body],
+                message_id: '',
+                type: 'success',
+                operation: '==',
+                value: 3
+            }
+        ]
+    ]
+]);
+
+
 export const MQTT_Action_Rules = new Map<string, Map<string, Rule_Type[]> >(
     [
-        [MQTT_Action_Name.roll_over_left, Roll_Over_Left_Rules]
+        [MQTT_Action_Name.roll_over_left, Roll_Over_Left_Rules],
+        [MQTT_Action_Name.roll_over_right, Roll_Over_Right_Rules]
     ]
 );
 

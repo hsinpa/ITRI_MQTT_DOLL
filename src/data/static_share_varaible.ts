@@ -1,5 +1,3 @@
-export let MQTT_ID: string = "1";
-
 export const API = Object.freeze({
     MQTT_URL : "wss://broker.mqttgo.io:8084/mqtt"
 });
@@ -8,28 +6,28 @@ export const MQTTFrontModeOut = Object.freeze({
     ID : "ITRI/照護人{0}/正面模式發",
 
     Idle: 0,
-    Left_MCU_Read_Action: 1,
-    Left_MCU_Calibration_Mode: 2,
-    Left_MCU_Waiting: 3,
+    Left_MCU_Read_Action: 6,
+    Left_MCU_Calibration_Mode: 7,
+    Left_MCU_Waiting: 8,
 
     All_Calibration_Mode: 5,
 
-    Right_MCU_Read_Action: 6,
-    Right_MCU_Calibration_Mode: 7,
-    Right_MCU_Waiting: 8,
+    Right_MCU_Read_Action: 1,
+    Right_MCU_Calibration_Mode: 2,
+    Right_MCU_Waiting: 3,
 });
 
 export const MQTTFrontModeIn = Object.freeze({
     ID : "ITRI/照護人{0}/正面模式收",
 
     Idle: 0,
-    Left_MCU_Read_Action: 1,
-    Left_MCU_Calibration_Mode: 2,
-    Left_MCU_Waiting: 3,
+    Left_MCU_Read_Action: 6,
+    Left_MCU_Calibration_Mode: 7,
+    Left_MCU_Waiting: 8,
 
-    Right_MCU_Read_Action: 6,
-    Right_MCU_Calibration_Mode: 7,
-    Right_MCU_Waiting: 8,
+    Right_MCU_Read_Action: 1,
+    Right_MCU_Calibration_Mode: 2,
+    Right_MCU_Waiting: 3,
 });
 
 export const MQTTBackModeOut = Object.freeze({

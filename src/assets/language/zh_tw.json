@@ -9,8 +9,8 @@
     "roll_over_left":"左翻",
     "roll_over_right":"右翻",
 
-    "hand":"手部",
-    "knee":"腳部",
+    "hand":"抬手",
+    "knee":"抬腳",
     "body":"身體",
 
     "home_page_title":"智慧照顧數位賦能平台",
@@ -26,5 +26,7 @@
     "password": "密碼",
     "forget_password": "忘記密碼?",
 
-    "stage_complete": "訓練完成, 五秒後返回選擇介面"
+    "stage_complete": "訓練完成, 五秒後返回選擇介面",
+    "stage_error": "{0}訓練時誤做{1}"
+
 }

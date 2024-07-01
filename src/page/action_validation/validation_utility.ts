@@ -18,7 +18,6 @@ export let rule_matching = function(target_event_id: string, state: string, rule
         let rule: Rule_Type = rules[r_index];
         let index = rule.matches.findIndex(x=>x == target_event_id);
         let score = validation_scores.find(x=>x.name == rule.score_id);
-        console.log('score', score);
 
         if (score == null) continue;
 
@@ -30,7 +29,7 @@ export let rule_matching = function(target_event_id: string, state: string, rule
 
 let ops_query = function(value: number, constraint: number, ops: string) {
 
-    console.log(value, constraint, ops)
+    // console.log(value, constraint, ops)
     if (ops == "==") {
         return value == constraint;
     }

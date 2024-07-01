@@ -21,6 +21,8 @@ export const ActionPage = function({event_system, mqtt_server}: {event_system: E
 
         mqtt_server.set_client_id(selected_id);
         set_client_id(selected_id);
+
+        mqtt_server.reconnect();
     }
 
     return (

@@ -1,29 +1,15 @@
 import * as mqtt from 'mqtt';
-import { MCUResultInEvent } from '../data/static_flow_variable';
 import EventSystem from '../utility/EventSystem';
 import { MqttEventListener } from './mqtt_listener';
 import { LocalStorageKey, MQTTFrontModeOut } from '../data/static_share_varaible';
-
-const EVENT_LISTENER_LIST = [
-    MCUResultInEvent.Body,
-    MCUResultInEvent.Head,
-
-    MCUResultInEvent.LeftArmFlex,
-    MCUResultInEvent.LeftArmIMU,
-    MCUResultInEvent.LeftKneeFlex,
-    MCUResultInEvent.LeftKneeIMU,
-
-    MCUResultInEvent.RightArmFlex,
-    MCUResultInEvent.RightArmIMU,
-    MCUResultInEvent.RightKneeFlex,
-    MCUResultInEvent.RightKneeIMU,
-]
+import { DoDelayAction } from '../utility/UtilityFunc';
 
 export class MQTTServer {
     private _mqtt_client: mqtt.MqttClient | undefined;
     private _mqtt_listener: MqttEventListener | undefined;
     private _event_system: EventSystem;
     private _client_id: string = "1";
+    private _url: string = '';
 
     get client_id(): string {
         return this._client_id;
@@ -42,10 +28,11 @@ export class MQTTServer {
     }
 
     connect(url: string) {
-        if (this._mqtt_client != undefined && !this._mqtt_client.disconnected) {
+        if (this._mqtt_client != undefined) {
             return;
         }
-
+        this._url = url;
+        
         this._mqtt_client = mqtt.default.connect(url);
         this._mqtt_listener = new MqttEventListener(this._mqtt_client, this._event_system, this.get_mqtt_cmd.bind(this));
 
@@ -54,8 +41,7 @@ export class MQTTServer {
         });
 
         this._mqtt_client.on("message", (topic, message, packet) => {
-            //console.log(topic, message.toString());
-
+            // console.log(topic, message.toString());
             this._mqtt_listener?.on_message(topic, message, packet);
         });          
     }
@@ -73,9 +59,19 @@ export class MQTTServer {
         this._mqtt_client.publish(cmd_id,  command_value.toString() );
     }
 
+    public async reconnect() {
+        this.disconnect();
+
+        await DoDelayAction(100);
+
+        if (this._url != '' || this._url != undefined )
+            this.connect(this._url);
+    }
+
     public disconnect() {
         this._mqtt_client?.end();
         this._mqtt_client = undefined;
+        this._mqtt_listener = undefined;
     }
 
     public get_mqtt_cmd(cmd_message_id: string) {
