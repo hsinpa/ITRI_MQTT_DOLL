@@ -7,7 +7,7 @@ import '../../assets/scss/validation_page.scss';
 import { MQTT_Action_MQTT, MQTT_Action_Validation, Validation_Score } from "../../data/mqtt_action_table";
 import { useEffect, useState } from "react";
 import i18next, { t } from "i18next";
-import { MQTTFrontModeOut } from "../../data/static_share_varaible";
+import { MQTTEvent, MQTTFrontModeOut, MQTTLightBulbIn } from "../../data/static_share_varaible";
 import { CancellationToken, Clamp, DoDelayAction, FormatString } from "../../utility/UtilityFunc";
 import { MQTT_Action_Rules, Rule_Type } from "../../data/mqtt_action_rules";
 import { process_msg_event, rule_matching } from "./validation_utility";
@@ -67,6 +67,13 @@ let get_validation_scores = function(target_validation_id: string, scores: Valid
     return {score: 0, index: -1};
 }
 
+let fire_event_list = function(events: MQTTEvent[], mqtt_server: MQTTServer) {
+    if (events == null || mqtt_server == null) return;
+
+    for (let i = 0; i < events.length; i++) {
+        mqtt_server.send(mqtt_server.get_mqtt_cmd(events[i].id), events[i].value);
+    }
+}
 
 
 let cancellation_token: CancellationToken = {is_cancel: false};
@@ -108,7 +115,8 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         }
 
         if (rule.type == 'error') {
-            if (index > 0) local_val_state = ( validation_table[index - 1].name + '')
+            if (index > 0) local_val_state = ( validation_table[index - 1].name + '');
+            fire_event_list(rule.trigger_events, mqtt_server);
             return;
         }
 
@@ -116,9 +124,13 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
             validationFulfilled = true;
             setValidationFulfilled(true);
             setDisplayMessage(t("stage_complete"))
+
+            mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTLightBulbIn.ID), MQTTLightBulbIn.Bulb_3);
             return;
         }
+
         local_val_state = validation_table[index + 1].name;
+        fire_event_list(rule.trigger_events, mqtt_server);
     }
 
     let on_message_event = function(event_id: string, message: Buffer) {
@@ -205,6 +217,8 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         let action_id = MQTT_Action_MQTT.get(material_name);
         if (action_id != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTFrontModeOut.ID), action_id);
 
+        mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTLightBulbIn.ID), MQTTLightBulbIn.All_Off);
+
         return () => {
             validation_score_map.clear();
           cancellation_token.is_cancel = true;
@@ -212,6 +226,7 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
 
           setValidationScores([]);
           deregister_event(event_system, mqtt_server, validationScores);
+          mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTLightBulbIn.ID), MQTTLightBulbIn.All_Off);
         };
     }, []);
     
@@ -239,7 +254,6 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
                 <div className="complete_notification notification is-success">
                     <img src={exclamation_icon}></img>
                     {displayMessage}
-                    {/* {t("stage_complete") } */}
                 </div>
             }
             </div>

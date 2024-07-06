@@ -69,18 +69,13 @@ export const MQTTTeachModeOut = Object.freeze({
     None: 8,
 });
 
-export const MQTTTeachModeIn = Object.freeze({
+export const MQTTLightBulbIn = Object.freeze({
     ID : "ITRI/照護人{0}/教材模式發",
 
-    Action_1_Completed: 0,
-    Action_2_Completed: 1,
-    Action_3_Completed: 2,
-    Action_4_Completed: 3,
-    Action_5_Completed: 4,
-    Action_6_Completed: 5,
-    Action_7_Completed: 6,
-    Action_8_Completed: 7,
-    None: 8
+    Bulb_1: 1,
+    Bulb_2: 3,
+    Bulb_3: 5,
+    All_Off: 8
 });
 
 export function get_mqtt_cmd(client_id: string, cmd_message_id: string) {
@@ -92,3 +87,8 @@ export const DollIDList = ['1', '2', '3', '4', '5', '6']
 export const LocalStorageKey = Object.freeze({
     DOLL_ID: 'doll_id'
 });
+
+export interface MQTTEvent {
+    id: string,
+    value: number
+}

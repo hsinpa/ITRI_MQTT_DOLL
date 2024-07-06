@@ -1,9 +1,12 @@
 import { MQTT_Action_Name, MQTT_State_Name } from "./mqtt_action_table";
 import { MCUResultInEvent } from "./static_flow_variable";
+import { MQTTEvent, MQTTLightBulbIn } from "./static_share_varaible";
 
 export interface Rule_Type {
     score_id: string,
     matches: string[],
+    trigger_events: MQTTEvent[], 
+    sound_effect?: string[]
     message_id: string,
     type: 'warn' | 'error' | 'success'
     operation: '>' | '<' | '==',
@@ -17,6 +20,7 @@ const Roll_Over_Left_Rules = new Map<string, Rule_Type[]>([
                 score_id: MQTT_State_Name.hand,
                 matches: [MCUResultInEvent.RightArmFlex, MCUResultInEvent.RightArmIMU],
                 message_id: '',
+                trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.Bulb_1}],
                 type: 'success',
                 operation: '==',
                 value: 3
@@ -31,6 +35,7 @@ const Roll_Over_Left_Rules = new Map<string, Rule_Type[]>([
                 matches: [MCUResultInEvent.RightArmFlex, MCUResultInEvent.RightArmIMU],
                 message_id: '',
                 type: 'error',
+                trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.All_Off}],
                 operation: '<',
                 value: 2
             },
@@ -39,6 +44,7 @@ const Roll_Over_Left_Rules = new Map<string, Rule_Type[]>([
                 matches: [MCUResultInEvent.Body],
                 message_id: '',
                 type: 'warn',
+                trigger_events: [],
                 operation: '>',
                 value: 2
             },
@@ -46,6 +52,7 @@ const Roll_Over_Left_Rules = new Map<string, Rule_Type[]>([
                 score_id: MQTT_State_Name.knee,
                 matches: [MCUResultInEvent.RightKneeFlex, MCUResultInEvent.RightKneeIMU],
                 message_id: '',
+                trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.Bulb_2}],
                 type: 'success',
                 operation: '==',
                 value: 3
@@ -58,6 +65,8 @@ const Roll_Over_Left_Rules = new Map<string, Rule_Type[]>([
                 score_id: MQTT_State_Name.body,
                 matches: [MCUResultInEvent.Body],
                 message_id: '',
+                trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.Bulb_3}],
+
                 type: 'success',
                 operation: '==',
                 value: 3
@@ -65,7 +74,6 @@ const Roll_Over_Left_Rules = new Map<string, Rule_Type[]>([
         ]
     ]
 ]);
-
 
 const Roll_Over_Right_Rules = new Map<string, Rule_Type[]>([
     [MQTT_State_Name.hand,
@@ -75,6 +83,8 @@ const Roll_Over_Right_Rules = new Map<string, Rule_Type[]>([
                 matches: [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
                 message_id: '',
                 type: 'success',
+                trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.Bulb_1}],
+
                 operation: '==',
                 value: 3
             },
@@ -89,6 +99,8 @@ const Roll_Over_Right_Rules = new Map<string, Rule_Type[]>([
                 message_id: '',
                 type: 'error',
                 operation: '<',
+                trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.All_Off}],
+
                 value: 2
             },
             {
@@ -97,6 +109,8 @@ const Roll_Over_Right_Rules = new Map<string, Rule_Type[]>([
                 message_id: '',
                 type: 'warn',
                 operation: '>',
+                trigger_events: [],
+
                 value: 2
             },
             {
@@ -105,6 +119,8 @@ const Roll_Over_Right_Rules = new Map<string, Rule_Type[]>([
                 message_id: '',
                 type: 'success',
                 operation: '==',
+                trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.Bulb_2}],
+
                 value: 3
             }
         ]
@@ -116,6 +132,7 @@ const Roll_Over_Right_Rules = new Map<string, Rule_Type[]>([
                 matches: [MCUResultInEvent.Body],
                 message_id: '',
                 type: 'success',
+                trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.Bulb_3}],
                 operation: '==',
                 value: 3
             }
