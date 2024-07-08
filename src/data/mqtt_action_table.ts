@@ -1,3 +1,4 @@
+import { AudioEventValue } from "./audio_static";
 import { MCUResultInEvent } from "./static_flow_variable";
 import { MQTTFrontModeOut } from "./static_share_varaible";
 
@@ -43,6 +44,11 @@ export interface Validation_Score {
 export const MaterialDetailsLookUp = new Map<string, string[]> ([
     [Material_Table.roll_over, [MQTT_Action_Name.roll_over_left, MQTT_Action_Name.roll_over_right]],
     [Material_Table.pat_back, []]
+]);
+
+export const MaterialAudioPair = new Map<string, string> ([
+    [MQTT_Action_Name.roll_over_left, AudioEventValue.Event005_翻身教材左翻],
+    [MQTT_Action_Name.roll_over_right, AudioEventValue.Event006_翻身教材右翻]
 ]);
 
 export const MQTT_Action_Validation = new Map<string, Validation_Score[]>(

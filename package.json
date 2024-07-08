@@ -12,6 +12,7 @@
     "restart_prod": "pm2 restart itri_mqtt_doll"
   },
   "dependencies": {
+    "howler": "^2.2.4",
     "i18next": "^23.11.3",
     "mqtt": "^5.5.3",
     "react": "^18.2.0",
@@ -19,6 +20,7 @@
     "react-player": "^2.16.0"
   },
   "devDependencies": {
+    "@types/howler": "^2.2.11",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",

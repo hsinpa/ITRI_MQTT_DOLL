@@ -18,6 +18,7 @@ import { API } from './data/static_share_varaible.ts';
 import { ActionValidationPage } from './page/action_validation/action_validation.tsx';
 import i18next from 'i18next';
 import zh_tw_lang from './assets/language/zh_tw.json';
+import AudioSystem from './utility/audio/AudioSystem.ts'
 
 i18next.init({
   lng: 'zh_tw',
@@ -30,6 +31,7 @@ i18next.init({
 });
 
 const event_system = new EventSystem();
+const audio_system = new AudioSystem(event_system);
 const mqtt_server = new MQTTServer(event_system);
       mqtt_server.connect(API.MQTT_URL);
 

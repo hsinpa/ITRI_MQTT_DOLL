@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom'
 import '../../assets/scss/material_page.scss'
 import { PageHeader } from '../page_header'
 import i18next from 'i18next'
-import { MaterialDetailsLookUp, Material_Table } from '../../data/mqtt_action_table'
+import { MaterialAudioPair, MaterialDetailsLookUp, Material_Table } from '../../data/mqtt_action_table'
 import { MQTTServer } from '../../mqtt/mqtt_server'
 import EventSystem from '../../utility/EventSystem'
 import { Fragment, useEffect, useState } from 'react'
+import { AudioEventID } from '../../data/audio_static'
 
 interface DetailMatInterface {
     id: string,
@@ -47,7 +48,8 @@ export const MaterialSelectionPage = function({event_system, mqtt_server}: {even
                 let to_address = `/education_video?name=${detail_mat_array[i]}&material=${mat_interface.id}`;
 
                 detail_mats_dom.push(
-                    <Link className='button' key={detail_mat_array[i]} to={to_address}>{i18next.t(detail_mat_array[i])}</Link>
+                    <Link className='button' key={detail_mat_array[i]} to={to_address}
+                    onClick={() => event_system.Notify(AudioEventID.ID, MaterialAudioPair.get(detail_mat_array[i])) }>{i18next.t(detail_mat_array[i])}</Link>
                 );
             }
         }

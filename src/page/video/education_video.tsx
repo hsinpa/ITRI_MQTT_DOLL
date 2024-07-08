@@ -6,7 +6,9 @@ import { MQTTServer } from "../../mqtt/mqtt_server";
 import { MQTTFrontModeOut } from "../../data/static_share_varaible";
 import i18next from "i18next";
 import { useEffect } from "react";
-import { MQTT_Action_MQTT, MQTT_Material_Video, Material_Table } from "../../data/mqtt_action_table";
+import { MQTT_Action_MQTT, MQTT_Material_Video, MaterialAudioPair, Material_Table } from "../../data/mqtt_action_table";
+import {Howl, Howler} from 'howler';
+import { AudioEventID, AudioEventValue } from "../../data/audio_static";
 
 export const EducationVideoPage = function({event_system, mqtt_server}: {event_system: EventSystem, mqtt_server: MQTTServer}) {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -22,7 +24,14 @@ export const EducationVideoPage = function({event_system, mqtt_server}: {event_s
 
     useEffect(() => {
         let action_id = MQTT_Action_MQTT.get(video_name);
-        if (action_id != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTFrontModeOut.ID), action_id);            
+        if (action_id != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTFrontModeOut.ID), action_id);           
+        
+        event_system.Notify(AudioEventID.ID, AudioEventValue.Event007_影片引導);
+
+        // var sound = new Howl({
+        //     src: ['audio_files/tw/0001_獨立模式啟動.mp3']
+        //   });
+        //   sound.play();
     }, []);
 
     return (

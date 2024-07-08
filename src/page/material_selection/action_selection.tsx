@@ -6,6 +6,7 @@ import { MQTTServer } from '../../mqtt/mqtt_server'
 import { useEffect, useState } from 'react'
 import { DollIDList } from '../../data/static_share_varaible'
 import { DollDropdown } from './doll_dropdown'
+import { AudioEventID, AudioEventValue } from '../../data/audio_static'
 
 
 
@@ -29,7 +30,7 @@ export const ActionPage = function({event_system, mqtt_server}: {event_system: E
         <div id="action_page">
             <DollDropdown selected_option={client_id} options={DollIDList} select_callback={on_dropdown_select}></DollDropdown>
             <div className='action_comp'>
-                <Link className='button' to='/material_page'>{i18next.t('teaching_material')}</Link>
+                <Link className='button' to='/material_page' onClick={() => event_system.Notify(AudioEventID.ID, AudioEventValue.Event003_培訓教材)}>{i18next.t('teaching_material')}</Link>
                 <Link className='button' to='#'>{i18next.t('custom_material')}</Link>
             </div>
         </div>

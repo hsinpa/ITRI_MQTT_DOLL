@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import i18next from 'i18next';
 import itri_logo from './assets/texture/sprite/itri-logo.png';
+import { AudioEventID, AudioEventValue } from './data/audio_static';
 
 function App({event_system, mqtt_server}: {event_system: EventSystem, mqtt_server: MQTTServer}) {
 
@@ -25,7 +26,7 @@ function App({event_system, mqtt_server}: {event_system: EventSystem, mqtt_serve
           <input className='input' type="password" placeholder='*******'></input>
         </div>
         <Link className='forget_password' to='/#forget_password'>{i18next.t('forget_password')}</Link>
-        <Link className='button' to='/action_page'>{i18next.t('login')}</Link>
+        <Link className='button' to='/action_page' onClick={()=>event_system.Notify(AudioEventID.ID, AudioEventValue.Event002_線上模式起動)}>{i18next.t('login')}</Link>
       </div>
     </div>
   )
