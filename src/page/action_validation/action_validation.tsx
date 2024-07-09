@@ -13,6 +13,8 @@ import { MQTT_Action_Rules, Rule_Type } from "../../data/mqtt_action_rules";
 import { process_msg_event, rule_matching } from "./validation_utility";
 import { useUserInfoStore } from "./validation_zusland";
 import exclamation_icon from '../../assets/texture/sprite/exclamation.svg';
+import { MQTT_Audio_Rules, Roll_Over_Left_Rules_Audio } from "../../data/mqtt_audio_rules";
+import { ActionAudioHandler } from "./action_audio";
 
 interface Validation_State_Result {
     index: number,
@@ -87,9 +89,12 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         validation_table = JSON.parse(JSON.stringify(validation_table));
 
     let validation_rules = MQTT_Action_Rules.get(material_name);
+    let audio_rules = MQTT_Audio_Rules.get(material_name);
+    let audio_handler = new ActionAudioHandler(event_system);
 
     if (validation_table == null) validation_table = [];
     if (validation_rules == null) validation_rules = new Map();
+    if (audio_rules == null) audio_rules = new Map();
 
     let validation_score_map = new Map<string, number>();
 
@@ -98,13 +103,25 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
     let [displayMessage, setDisplayMessage] = useState('');
     let [displayMessageDelay, setDisplayMessageDelay] = useState(0);
 
+    let set_val_state = function(validation_state: Validation_Score) {
+        local_val_state = validation_state.name + "";
+
+        audio_handler.set_loop_audio(validation_state.idle_audio_id);
+        
+        return local_val_state;
+    }
 
     let process_rule = function(rule: Rule_Type) {
-        if (rule == null) return;
+        if (rule == null || rule.trigger_events == null) return;
 
         console.log('process_rule', rule);
         let index = validation_table.findIndex(x => x.name == local_val_state);
         
+        // Only to play audio
+        if (rule.type == 'none') {
+            return;
+        }
+
         if (rule.type == 'warn' || rule.type == 'error') {
             let error_msg = (t("stage_error"))
             setDisplayMessage(FormatString(error_msg, [t(local_val_state), t(rule.score_id)]))
@@ -115,11 +132,11 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         }
 
         if (rule.type == 'error') {
-            if (index > 0) local_val_state = ( validation_table[index - 1].name + '');
+            if (index > 0) set_val_state(validation_table[index - 1]);
             fire_event_list(rule.trigger_events, mqtt_server);
             return;
         }
-
+        
         if (index >= validation_table.length - 1) {
             validationFulfilled = true;
             setValidationFulfilled(true);
@@ -129,7 +146,8 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
             return;
         }
 
-        local_val_state = validation_table[index + 1].name;
+        set_val_state(validation_table[index + 1]);
+
         fire_event_list(rule.trigger_events, mqtt_server);
     }
 
@@ -142,6 +160,7 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         let max_score = 3;
         let validation_scores = get_validation_scores(event_id, validationScores, validation_score_map, mqtt_server);
         let rule = validation_rules.get(local_val_state);
+        let audio_rule = audio_rules.get(local_val_state);
 
         console.log('rule', rule);
 
@@ -160,6 +179,12 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         validationScores[validation_scores.index].score = validation_scores.score;
 
         let rule_match_result = rule_matching(revert_event_id, local_val_state, rule, validationScores);
+        
+        // Play Audio 
+        if (audio_rule != null) {
+            let audio_match_result = rule_matching(revert_event_id, local_val_state, audio_rule, validationScores);
+            if (audio_match_result != null) audio_handler.play(audio_match_result);
+        }
 
         if ((rule_match_result != null && rule_match_result.type == 'warn') || 
             (original_v_score == 3 && rule_match_result == null)
@@ -211,6 +236,7 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         console.log("ActionValidationPage");
         cancellation_token.is_cancel = false;
         local_val_state = validation_table[0].name;
+
         validation_score_map.clear();
         register_event(event_system, mqtt_server, validationScores, on_message_event)
 
@@ -224,6 +250,7 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
           cancellation_token.is_cancel = true;
           local_val_state = '';
 
+          audio_handler.dispose();
           setValidationScores([]);
           deregister_event(event_system, mqtt_server, validationScores);
           mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTLightBulbIn.ID), MQTTLightBulbIn.All_Off);
