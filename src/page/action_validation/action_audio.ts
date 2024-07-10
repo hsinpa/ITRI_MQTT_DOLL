@@ -29,6 +29,7 @@ export class ActionAudioHandler {
     }
 
     dispose() {
+        this._frame_loop_id = undefined;
         if (this._interval_id != null)
             clearInterval(this._interval_id);
     }
@@ -39,7 +40,7 @@ export class ActionAudioHandler {
             return;
         }
 
-        if (this._frame_loop_id) return;
+        if (this._frame_loop_id == undefined) return;
 
         this._event_system.Notify(AudioEventID.ID, this._frame_loop_id);
     }

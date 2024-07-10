@@ -90,6 +90,18 @@
             width: 7em;
         }
 
+        .button {
+            @include v.gradient_button(v.$color_gradient_start, v.$color_gradient_end);
+            width: 7em;
+        }
+
+
+        button:disabled {
+            background: #200225;
+            color: rgb(116, 116, 116);
+          }
+          
+
         .expand {
             position: absolute;
             display: flex;

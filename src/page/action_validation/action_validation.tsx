@@ -104,6 +104,7 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
     let [displayMessageDelay, setDisplayMessageDelay] = useState(0);
 
     let set_val_state = function(validation_state: Validation_Score) {
+        console.log(validation_state);
         local_val_state = validation_state.name + "";
 
         audio_handler.set_loop_audio(validation_state.idle_audio_id);
@@ -161,6 +162,7 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         let validation_scores = get_validation_scores(event_id, validationScores, validation_score_map, mqtt_server);
         let rule = validation_rules.get(local_val_state);
         let audio_rule = audio_rules.get(local_val_state);
+        let current_index = validation_table.findIndex(x => x.name == local_val_state);
 
         console.log('rule', rule);
 
@@ -178,6 +180,12 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         validation_scores = get_validation_scores(event_id, validationScores, validation_score_map, mqtt_server);
         validationScores[validation_scores.index].score = validation_scores.score;
 
+        // let temp_validation_score = [...validationScores]
+        // temp_validation_score[validation_scores.index] = {...validationScores[validation_scores.index], score: validation_scores.score}
+
+        console.log('validation_scores.index', validation_scores.index)
+        // validationScores[validation_scores.index].score = validation_scores.score;
+
         let rule_match_result = rule_matching(revert_event_id, local_val_state, rule, validationScores);
         
         // Play Audio 
@@ -187,8 +195,10 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         }
 
         if ((rule_match_result != null && rule_match_result.type == 'warn') || 
-            (original_v_score == 3 && rule_match_result == null)
-            ) {
+            (original_v_score == 3 && rule_match_result == null) ||
+            (rule_match_result != null && rule_match_result.type == 'warn' &&
+                current_index != validation_scores.index
+            )) {
             if (original_score == undefined) original_score = 0; 
 
             validation_score_map.set(event_id, original_score);
@@ -235,7 +245,7 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
     useEffect(() => {
         console.log("ActionValidationPage");
         cancellation_token.is_cancel = false;
-        local_val_state = validation_table[0].name;
+        set_val_state(validation_table[0]);
 
         validation_score_map.clear();
         register_event(event_system, mqtt_server, validationScores, on_message_event)
@@ -249,7 +259,7 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
             validation_score_map.clear();
           cancellation_token.is_cancel = true;
           local_val_state = '';
-
+          
           audio_handler.dispose();
           setValidationScores([]);
           deregister_event(event_system, mqtt_server, validationScores);

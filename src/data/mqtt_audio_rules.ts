@@ -18,7 +18,7 @@ export const Roll_Over_Left_Rules_Audio = new Map<string, Rule_Type[]>([
             },
             {
                 score_id: MQTT_State_Name.knee,
-                matches: [MCUResultInEvent.RightKneeFlex, MCUResultInEvent.RightKneeFlex],
+                matches: [MCUResultInEvent.RightKneeFlex, MCUResultInEvent.RightArmIMU],
                 type: 'none',
                 operation: '>',
                 sound_effect: [AudioEventValue.Event044_抬手訓練時誤做抬腳],
@@ -74,8 +74,8 @@ export const Roll_Over_Left_Rules_Audio = new Map<string, Rule_Type[]>([
                 matches: [MCUResultInEvent.RightArmFlex, MCUResultInEvent.RightArmIMU],
                 sound_effect: [AudioEventValue.Event046_抬腳訓練時誤放抬手],
                 type: 'none',
-                operation: '>',
-                value: 0
+                operation: '<',
+                value: 3
             },
             {
                 score_id: MQTT_State_Name.knee,
