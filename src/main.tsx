@@ -19,6 +19,7 @@ import { ActionValidationPage } from './page/action_validation/action_validation
 import i18next from 'i18next';
 import zh_tw_lang from './assets/language/zh_tw.json';
 import AudioSystem from './utility/audio/AudioSystem.ts'
+import { LoginRegister } from './page/account/account_register.tsx'
 
 i18next.init({
   lng: 'zh_tw',
@@ -39,6 +40,10 @@ const router = createHashRouter([
   {
     path: "/",
     element: <App event_system={event_system} mqtt_server={mqtt_server}/>,
+  },
+  {
+    path: "/register",
+    element: <LoginRegister event_system={event_system}></LoginRegister>,
   },
   {
     path: "/action_page",

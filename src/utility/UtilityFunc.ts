@@ -109,3 +109,11 @@ export function FormatString(string: string, params: any[]) {
       return typeof params[index] !== 'undefined' ? params[index] : match;
     });
   }
+
+export function deep_clone_map(source_map: Map<any, any>): Map<any, any>{
+   return new Map(JSON.parse(JSON.stringify(Array.from(source_map))));
+}
+
+export function deep_clone_object(source_map: any) {
+    return JSON.parse(JSON.stringify(source_map));
+ }

@@ -75,7 +75,7 @@ export const Roll_Over_Left_Rules_Audio = new Map<string, Rule_Type[]>([
                 sound_effect: [AudioEventValue.Event046_抬腳訓練時誤放抬手],
                 type: 'none',
                 operation: '<',
-                value: 3
+                value: 2
             },
             {
                 score_id: MQTT_State_Name.knee,
@@ -118,9 +118,122 @@ export const Roll_Over_Left_Rules_Audio = new Map<string, Rule_Type[]>([
     ]
 ]);
 
+export const Roll_Over_Right_Rules_Audio = new Map<string, Rule_Type[]>([
+    [MQTT_State_Name.hand,
+        [
+            {
+                score_id: MQTT_State_Name.hand,
+                matches: [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
+                type: 'none',
+                operation: '==',
+                sound_effect: [AudioEventValue.Event030_右翻抬手動作完成, AudioEventValue.Event032_右翻抬腳動作開始],
+                value: 3
+            },
+            {
+                score_id: MQTT_State_Name.knee,
+                matches: [MCUResultInEvent.LeftKneeFlex, MCUResultInEvent.LeftArmIMU],
+                type: 'none',
+                operation: '>',
+                sound_effect: [AudioEventValue.Event044_抬手訓練時誤做抬腳],
+                value: 0
+            },
+            {
+                score_id: MQTT_State_Name.body,
+                matches: [MCUResultInEvent.Body],
+                type: 'none',
+                operation: '>',
+                sound_effect: [AudioEventValue.Event045_抬手訓練時誤做翻身],
+                value: 0
+            },
+            {
+                score_id: MQTT_State_Name.hand,
+                matches: [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
+                type: 'none',
+                operation: '==',
+                sound_effect: [AudioEventValue.Event029_請加強彎曲左手軸到胸前],
+                value: 2
+            },
+            {
+                score_id: MQTT_State_Name.hand,
+                matches: [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
+                type: 'none',
+                operation: '==',
+                sound_effect: [AudioEventValue.Event028_請加強移動左手臂到胸前],
+                value: 1
+            },
+        ]
+    ],
+
+    [MQTT_State_Name.knee,
+        [
+            {
+                score_id: MQTT_State_Name.knee,
+                matches: [MCUResultInEvent.LeftKneeFlex, MCUResultInEvent.LeftKneeIMU],
+                type: 'none',
+                operation: '==',
+                sound_effect: [AudioEventValue.Event036_右翻抬腳動作完成, AudioEventValue.Event038_右翻翻身動作開始],
+                value: 3
+            },
+            {
+                score_id: MQTT_State_Name.body,
+                matches: [MCUResultInEvent.Body],
+                type: 'none',
+                operation: '>',
+                sound_effect: [AudioEventValue.Event047_抬腳訓練時誤做翻身],
+                value: 0
+            },
+            {
+                score_id: MQTT_State_Name.hand,
+                matches: [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
+                sound_effect: [AudioEventValue.Event046_抬腳訓練時誤放抬手],
+                type: 'none',
+                operation: '<',
+                value: 2
+            },
+            {
+                score_id: MQTT_State_Name.knee,
+                matches: [MCUResultInEvent.LeftKneeFlex, MCUResultInEvent.LeftKneeIMU],
+                type: 'none',
+                operation: '==',
+                sound_effect: [AudioEventValue.Event035_請加強彎曲左膝蓋],
+                value: 2
+            },
+
+            {
+                score_id: MQTT_State_Name.knee,
+                matches: [MCUResultInEvent.RightKneeFlex, MCUResultInEvent.RightKneeIMU],
+                type: 'none',
+                operation: '==',
+                sound_effect: [AudioEventValue.Event034_請加強抬高左膝蓋],
+                value: 1
+            },
+        ]
+    ],
+    [MQTT_State_Name.body,
+        [
+            {
+                score_id: MQTT_State_Name.body,
+                matches: [MCUResultInEvent.Body],
+                sound_effect: [AudioEventValue.Event040_請加強右翻身角度及確認手腳位置],
+                type: 'success',
+                operation: '==',
+                value: 2
+            },
+            {
+                score_id: MQTT_State_Name.body,
+                matches: [MCUResultInEvent.Body],
+                sound_effect: [AudioEventValue.Event042_右翻翻身動作完成],
+                type: 'success',
+                operation: '==',
+                value: 3
+            }
+        ]
+    ]
+]);
+
 export const MQTT_Audio_Rules = new Map<string, Map<string, Rule_Type[]> >(
     [
         [MQTT_Action_Name.roll_over_left, Roll_Over_Left_Rules_Audio],
-        [MQTT_Action_Name.roll_over_right, Roll_Over_Left_Rules_Audio]
+        [MQTT_Action_Name.roll_over_right, Roll_Over_Right_Rules_Audio]
     ]
 );

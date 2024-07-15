@@ -7,6 +7,10 @@
  flex-direction: column;
 }
 
+.error_text {
+  color: red;
+}
+
 #app_page {
   margin: 0 auto;
   background: url("../texture/background/login_background.jpg");

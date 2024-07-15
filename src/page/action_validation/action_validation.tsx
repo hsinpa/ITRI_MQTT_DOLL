@@ -4,17 +4,18 @@ import EventSystem from "../../utility/EventSystem";
 import { PageHeader } from "../page_header";
 import { ValidationComponent } from "./validation_component";
 import '../../assets/scss/validation_page.scss';
-import { MQTT_Action_MQTT, MQTT_Action_Validation, Validation_Score } from "../../data/mqtt_action_table";
+import { MaterialAudioPair, MQTT_Action_MQTT, MQTT_Action_Validation, Validation_Score } from "../../data/mqtt_action_table";
 import { useEffect, useState } from "react";
 import i18next, { t } from "i18next";
 import { MQTTEvent, MQTTFrontModeOut, MQTTLightBulbIn } from "../../data/static_share_varaible";
-import { CancellationToken, Clamp, DoDelayAction, FormatString } from "../../utility/UtilityFunc";
+import { CancellationToken, Clamp, deep_clone_map, deep_clone_object, DoDelayAction, FormatString } from "../../utility/UtilityFunc";
 import { MQTT_Action_Rules, Rule_Type } from "../../data/mqtt_action_rules";
 import { process_msg_event, rule_matching } from "./validation_utility";
 import { useUserInfoStore } from "./validation_zusland";
 import exclamation_icon from '../../assets/texture/sprite/exclamation.svg';
 import { MQTT_Audio_Rules, Roll_Over_Left_Rules_Audio } from "../../data/mqtt_audio_rules";
 import { ActionAudioHandler } from "./action_audio";
+import { AudioEventID } from "../../data/audio_static";
 
 interface Validation_State_Result {
     index: number,
@@ -163,51 +164,48 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         let rule = validation_rules.get(local_val_state);
         let audio_rule = audio_rules.get(local_val_state);
         let current_index = validation_table.findIndex(x => x.name == local_val_state);
+        
+        if (validation_scores.index < 0 || rule == null) return;
+
+        let clone_validation_score_map: Map<string, number> = deep_clone_map(validation_score_map);
+        let clone_validation_score_obj: Validation_Score[] = deep_clone_object(validationScores);
 
         console.log('rule', rule);
-
-        if (validation_scores.index < 0 || rule == null) return;
-        if (!process_msg_event(revert_event_id, rule)) return;
 
         let score = parseFloat(message.toString());
             score = Clamp(score, 0, max_score);
 
-        let original_score = validation_score_map.get(event_id);
-        let original_v_score = validationScores[validation_scores.index].score;
+        let original_score = clone_validation_score_map.get(event_id);
+        let original_v_score = clone_validation_score_obj[validation_scores.index].score;
 
-        validation_score_map.set(event_id, score);
+        clone_validation_score_map.set(event_id, score);
 
-        validation_scores = get_validation_scores(event_id, validationScores, validation_score_map, mqtt_server);
-        validationScores[validation_scores.index].score = validation_scores.score;
+        validation_scores = get_validation_scores(event_id, clone_validation_score_obj, clone_validation_score_map, mqtt_server);
+        clone_validation_score_obj[validation_scores.index].score = validation_scores.score;
 
-        // let temp_validation_score = [...validationScores]
-        // temp_validation_score[validation_scores.index] = {...validationScores[validation_scores.index], score: validation_scores.score}
+        let rule_match_result = rule_matching(revert_event_id, local_val_state, rule, clone_validation_score_obj);
 
-        console.log('validation_scores.index', validation_scores.index)
-        // validationScores[validation_scores.index].score = validation_scores.score;
-
-        let rule_match_result = rule_matching(revert_event_id, local_val_state, rule, validationScores);
-        
         // Play Audio 
         if (audio_rule != null) {
-            let audio_match_result = rule_matching(revert_event_id, local_val_state, audio_rule, validationScores);
+            let audio_match_result = rule_matching(revert_event_id, local_val_state, audio_rule, clone_validation_score_obj);
             if (audio_match_result != null) audio_handler.play(audio_match_result);
         }
 
-        if ((rule_match_result != null && rule_match_result.type == 'warn') || 
-            (original_v_score == 3 && rule_match_result == null) ||
-            (rule_match_result != null && rule_match_result.type == 'warn' &&
-                current_index != validation_scores.index
-            )) {
-            if (original_score == undefined) original_score = 0; 
+        if (!process_msg_event(revert_event_id, rule)) return;
 
-            validation_score_map.set(event_id, original_score);
-            validationScores[validation_scores.index].score = original_v_score;
+        if ((rule_match_result != null && rule_match_result.type == 'warn') || 
+            (original_v_score == 3 && rule_match_result == null) 
+            ||
+            (rule_match_result == null && validation_scores.index > current_index
+            )
+        ) {
+            if (original_score == undefined) original_score = 0; 
 
             console.log('REVERT', event_id,  original_score);
             return;
         }
-        
+
+        validation_score_map.set(event_id, score);
         validationScores[validation_scores.index].score = validation_scores.score;
         setValidationScores([...validationScores]);
 
@@ -254,6 +252,9 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         if (action_id != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTFrontModeOut.ID), action_id);
 
         mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTLightBulbIn.ID), MQTTLightBulbIn.All_Off);
+
+        let start_audio_id = MaterialAudioPair.get(material_name)
+        if (start_audio_id != null )event_system.Notify(AudioEventID.ID, start_audio_id);
 
         return () => {
             validation_score_map.clear();

@@ -11,7 +11,7 @@ export class ActionAudioHandler {
 
     constructor(event_system: EventSystem) {
         this._event_system = event_system;
-        this._interval_id = setInterval(this.frame_loop.bind(this), 5000);
+        this._interval_id = setInterval(this.frame_loop.bind(this), 10000);
     }
 
     set_loop_audio(id: string) {
