@@ -35,7 +35,7 @@ export const LoginPage = function({event_system}: {event_system: EventSystem}) {
                 store.set('user_id', result['data']['id']);
                 store.set('name', result['data']['name']);
 
-                event_system.Notify(AudioEventID.ID, AudioEventValue.Event002_線上模式起動);
+                event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event002_線上模式起動});
                 navigate('/action_page')
                 return;
             }
@@ -50,7 +50,7 @@ export const LoginPage = function({event_system}: {event_system: EventSystem}) {
 
     useEffect(() => {
         if (store.has('user_id')){
-            event_system.Notify(AudioEventID.ID, AudioEventValue.Event002_線上模式起動);
+            event_system.Notify(AudioEventID.ID, {audio:AudioEventValue.Event002_線上模式起動});
             navigate('/action_page')
         }
     }, []);

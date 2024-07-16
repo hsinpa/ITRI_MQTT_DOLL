@@ -31,7 +31,9 @@ export const ActionPage = function({event_system, mqtt_server}: {event_system: E
             <DollDropdown selected_option={client_id} options={DollIDList} select_callback={on_dropdown_select}></DollDropdown>
 
             <div className='action_comp'>
-                <Link className='button' to='/material_page' onClick={() => event_system.Notify(AudioEventID.ID, AudioEventValue.Event003_培訓教材)}>{i18next.t('teaching_material')}</Link>
+                <Link className='button' to='/material_page' onClick={() => event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event003_培訓教材})}>
+                {i18next.t('teaching_material')}
+                </Link>
                 <Link className='button' to='#'>{i18next.t('custom_material')}</Link>
             </div>
         </div>

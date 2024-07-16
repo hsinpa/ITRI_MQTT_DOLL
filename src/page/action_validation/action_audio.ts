@@ -24,7 +24,7 @@ export class ActionAudioHandler {
         if (rule.sound_effect == null) return;
 
         for (let i = 0; i < rule.sound_effect.length; i++) {
-            this._event_system.Notify(AudioEventID.ID, rule.sound_effect[i]);
+            this._event_system.Notify(AudioEventID.ID, {audio: rule.sound_effect[i], force_play: rule.type == 'success'});
         }
     }
 
@@ -42,6 +42,6 @@ export class ActionAudioHandler {
 
         if (this._frame_loop_id == undefined) return;
 
-        this._event_system.Notify(AudioEventID.ID, this._frame_loop_id);
+        this._event_system.Notify(AudioEventID.ID, {audio: this._frame_loop_id});
     }
 }

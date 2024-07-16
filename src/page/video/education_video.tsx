@@ -26,7 +26,7 @@ export const EducationVideoPage = function({event_system, mqtt_server}: {event_s
         let action_id = MQTT_Action_MQTT.get(video_name);
         if (action_id != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTFrontModeOut.ID), action_id);           
         
-        event_system.Notify(AudioEventID.ID, AudioEventValue.Event007_影片引導);
+        event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event007_影片引導});
 
         // var sound = new Howl({
         //     src: ['audio_files/tw/0001_獨立模式啟動.mp3']

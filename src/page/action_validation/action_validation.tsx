@@ -4,7 +4,7 @@ import EventSystem from "../../utility/EventSystem";
 import { PageHeader } from "../page_header";
 import { ValidationComponent } from "./validation_component";
 import '../../assets/scss/validation_page.scss';
-import { MaterialAudioPair, MQTT_Action_MQTT, MQTT_Action_Validation, Validation_Score } from "../../data/mqtt_action_table";
+import { TrainingStartAudioPair, MQTT_Action_MQTT, MQTT_Action_Validation, Validation_Score } from "../../data/mqtt_action_table";
 import { useEffect, useState } from "react";
 import i18next, { t } from "i18next";
 import { MQTTEvent, MQTTFrontModeOut, MQTTLightBulbIn } from "../../data/static_share_varaible";
@@ -214,7 +214,7 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
     }
 
     let on_validation_debug_click = function(id: number) {
-        validationScores[id].score = 1;
+        validationScores[id].score = 3;
         setValidationScores([...validationScores])
     }
 
@@ -253,8 +253,8 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
 
         mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTLightBulbIn.ID), MQTTLightBulbIn.All_Off);
 
-        let start_audio_id = MaterialAudioPair.get(material_name)
-        if (start_audio_id != null )event_system.Notify(AudioEventID.ID, start_audio_id);
+        let start_audio_id = TrainingStartAudioPair.get(material_name)
+        if (start_audio_id != null )event_system.Notify(AudioEventID.ID, {audio: start_audio_id, force_play: true});
 
         return () => {
             validation_score_map.clear();
