@@ -1,0 +1,61 @@
+@use './variable.scss' as v;
+
+html {
+    overflow:hidden;
+
+}
+
+#record_page {
+    margin: 0 auto;
+    background: url("../texture/background/class_selection_background.jpg");
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: contain;
+    background-attachment: fixed;
+
+    height: 90vh;
+    overflow-y: scroll;
+
+    table {
+        margin-top: 1em;
+
+        thead {
+            background-color: v.$color_purple;
+            border-radius: 1em;
+            
+            th:first-child{
+                border-top-left-radius: 1em;
+            }
+            
+            th:last-child{
+                border-top-right-radius: 1em;
+            }
+            th {
+                font-family: NotoSansTC, Georgia, serif;  
+                text-align: center;
+                font-weight: bold;
+                color: black;
+                outline: none;
+                border: none;
+                padding: 1em 0.1em;
+            }
+        }
+
+        tbody {
+            td {
+                text-align: center;
+                padding: 1.5em 0em;
+            }
+
+            .error_msg {
+                color: #296E9E;
+            }
+
+            .error_msg:hover {
+                color: #3796da;
+                cursor: pointer;
+            }
+        }
+
+    }
+}

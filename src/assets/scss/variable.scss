@@ -6,6 +6,9 @@ $max_width: 1280px;
 $color_gradient_start: #3864ff;
 $color_gradient_end: #8f00ff;
 
+$color_purple: #C3A7FB;
+
+
 @mixin gradient_text($color_start, $end) {
     color: $color_start; 
     background-image: -webkit-linear-gradient(45deg, $color_start 0%, $end 100%); 

@@ -45,7 +45,8 @@ export const LoginRegister = function({event_system}: {event_system: EventSystem
                 return;
             }
         } catch {
-
+            event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event002_線上模式起動});
+            navigate('/action_page')
         }
 
         setErrorMsg('帳號密碼錯誤')

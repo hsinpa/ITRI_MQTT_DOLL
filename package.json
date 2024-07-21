@@ -14,16 +14,19 @@
   "dependencies": {
     "howler": "^2.2.4",
     "i18next": "^23.11.3",
+    "moment": "^2.30.1",
     "mqtt": "^5.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-player": "^2.16.0",
-    "store2": "^2.14.3"
+    "store2": "^2.14.3",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/howler": "^2.2.11",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",

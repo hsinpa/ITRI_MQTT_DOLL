@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const API = Object.freeze({
     MQTT_URL : "wss://broker.mqttgo.io:8084/mqtt"
 });
@@ -91,4 +93,28 @@ export const LocalStorageKey = Object.freeze({
 export interface MQTTEvent {
     id: string,
     value: number
+}
+
+export interface HistoryRecord { 
+    caregiverId: string
+    name: string,
+    time: string,
+    title: string,
+    is_complete: boolean,
+    errorPrompt: string[],
+    timestamp: number,
+    remark?: string,
+}
+
+export function get_empty_record(): HistoryRecord {
+    return {
+        caregiverId: uuidv4(),
+        name: '',
+        time: '',
+        title: '',
+        is_complete: false,
+        errorPrompt: [],
+        timestamp: 0,
+        remark: '',
+    }
 }

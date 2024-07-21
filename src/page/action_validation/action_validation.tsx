@@ -7,7 +7,7 @@ import '../../assets/scss/validation_page.scss';
 import { TrainingStartAudioPair, MQTT_Action_MQTT, MQTT_Action_Validation, Validation_Score } from "../../data/mqtt_action_table";
 import { useEffect, useState } from "react";
 import i18next, { t } from "i18next";
-import { MQTTEvent, MQTTFrontModeOut, MQTTLightBulbIn } from "../../data/static_share_varaible";
+import { get_empty_record, HistoryRecord, MQTTEvent, MQTTFrontModeOut, MQTTLightBulbIn } from "../../data/static_share_varaible";
 import { CancellationToken, Clamp, deep_clone_map, deep_clone_object, DoDelayAction, FormatString } from "../../utility/UtilityFunc";
 import { MQTT_Action_Rules, Rule_Type } from "../../data/mqtt_action_rules";
 import { process_msg_event, rule_matching } from "./validation_utility";
@@ -15,7 +15,8 @@ import { useUserInfoStore } from "./validation_zusland";
 import exclamation_icon from '../../assets/texture/sprite/exclamation.svg';
 import { MQTT_Audio_Rules, Roll_Over_Left_Rules_Audio } from "../../data/mqtt_audio_rules";
 import { ActionAudioHandler } from "./action_audio";
-import { AudioEventID } from "../../data/audio_static";
+import { AudioEventID, AudioEventValue } from "../../data/audio_static";
+import { LocalStorageSystem } from "../../mqtt/local_record_system";
 
 interface Validation_State_Result {
     index: number,
@@ -23,6 +24,7 @@ interface Validation_State_Result {
 }
 
 let local_val_state = '';
+let local_record: HistoryRecord;
 
 let register_event = function(event_system: EventSystem, mqtt_server: MQTTServer , validation_list: Validation_Score[] | undefined, callback: any) {
     if (validation_list == undefined) return;
@@ -81,7 +83,8 @@ let fire_event_list = function(events: MQTTEvent[], mqtt_server: MQTTServer) {
 
 let cancellation_token: CancellationToken = {is_cancel: false};
 
-export const ActionValidationPage = function({event_system, mqtt_server}: {event_system: EventSystem, mqtt_server: MQTTServer}) {
+export const ActionValidationPage = function({event_system, mqtt_server, record}: 
+                                            {event_system: EventSystem, mqtt_server: MQTTServer, record: LocalStorageSystem}) {
     let [searchParams, setSearchParams] = useSearchParams();
     let material_name = searchParams.get('name');
 
@@ -126,7 +129,9 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
 
         if (rule.type == 'warn' || rule.type == 'error') {
             let error_msg = (t("stage_error"))
-            setDisplayMessage(FormatString(error_msg, [t(local_val_state), t(rule.score_id)]))
+            let final_msg = FormatString(error_msg, [t(local_val_state), t(rule.score_id)]);
+            setDisplayMessage(final_msg)
+            local_record.errorPrompt.push(final_msg);
         }
 
         if (rule.type == 'warn') {
@@ -144,7 +149,11 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
             setValidationFulfilled(true);
             setDisplayMessage(t("stage_complete"))
 
+            local_record.is_complete = true;
             mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTLightBulbIn.ID), MQTTLightBulbIn.Bulb_3);
+
+            event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event055_此培訓操作已完成, force_play: true});
+
             return;
         }
 
@@ -226,7 +235,7 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
             await DoDelayAction(5000, cancellation_token);
 
             if (window.location.href.includes('action_validation'))
-                window.location.href="#/action_page";
+                window.location.href="#/record_page";
         }
     }
 
@@ -243,6 +252,11 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
     useEffect(() => {
         console.log("ActionValidationPage");
         cancellation_token.is_cancel = false;
+        local_record = get_empty_record();
+        local_record.is_complete = false;
+        local_record.title = i18next.t(material_name);
+        local_record.name = '測試員';
+
         set_val_state(validation_table[0]);
 
         validation_score_map.clear();
@@ -256,15 +270,24 @@ export const ActionValidationPage = function({event_system, mqtt_server}: {event
         let start_audio_id = TrainingStartAudioPair.get(material_name)
         if (start_audio_id != null )event_system.Notify(AudioEventID.ID, {audio: start_audio_id, force_play: true});
 
+
         return () => {
+            if (validationFulfilled) {
+                event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event056_感謝您的體驗, force_play: true});
+            }
+
+            local_record.timestamp = new Date().getTime();
+            local_record.time = new Date().toUTCString();
+            record.push_records(local_record);
+
             validation_score_map.clear();
-          cancellation_token.is_cancel = true;
-          local_val_state = '';
-          
-          audio_handler.dispose();
-          setValidationScores([]);
-          deregister_event(event_system, mqtt_server, validationScores);
-          mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTLightBulbIn.ID), MQTTLightBulbIn.All_Off);
+            cancellation_token.is_cancel = true;
+            local_val_state = '';
+
+            audio_handler.dispose();
+            setValidationScores([]);
+            deregister_event(event_system, mqtt_server, validationScores);
+            mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTLightBulbIn.ID), MQTTLightBulbIn.All_Off);
         };
     }, []);
     

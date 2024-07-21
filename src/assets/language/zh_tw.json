@@ -32,6 +32,18 @@
     "back": "返回",
     "forget_password": "忘記密碼?",
 
+    "record_page":"培訓紀錄",
+    "record_user":"人員",
+    "record_time":"時間",
+    "record_completion":"完成度",
+    "record_material":"培訓項目",
+    "record_error":"錯誤提醒",
+    "record_note":"其他備註",
+    "record_none":"無",
+    "record_complete":"完成",
+    "record_non_complete":"未完成",
+    "record_error_message":"錯誤次數 {0}次",
+
     "stage_complete": "訓練完成, 五秒後返回選擇介面",
     "stage_error": "{0}訓練時誤做{1}"
 

@@ -32,6 +32,11 @@
         .button {
             @include v.gradient_button(v.$color_gradient_start, v.$color_gradient_end);
             width: 7em;
+
+            position: absolute;
+            bottom: 1em;
+            -ms-transform: translate(-50%, 0%);
+            transform: translate(-50%, 0%);    
         }
     }
 }
