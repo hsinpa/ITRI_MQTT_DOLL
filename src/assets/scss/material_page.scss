@@ -63,6 +63,7 @@
     background-repeat: no-repeat;
     background-position: center bottom;
     background-size: contain;
+    position: relative;
   
     height: 92vh;
   
@@ -74,6 +75,24 @@
 
     .render_detail_comp {
         position: absolute;
+    }
+
+    .icon_group {
+        display: flex;
+        position: absolute;
+        bottom: -1.5em;
+        left: 3em;
+        gap: 2em;
+
+        img {
+            object-fit:contain;
+            width: 10em;
+            max-height: 8em;
+        }
+
+        @media (max-width: v.$mobile_max_screen) {
+            left: 0em;
+        }
     }
 
     .material_selection_comp {
@@ -88,11 +107,6 @@
         
         @media (max-width: v.$mobile_max_screen) {
             grid-template-columns: 1fr;
-        }    
-
-        .button {
-            @include v.gradient_button(v.$color_gradient_start, v.$color_gradient_end);
-            width: 7em;
         }
 
         .button {
@@ -100,10 +114,14 @@
             width: 7em;
         }
 
+        .inner_btn {
+            @include v.gradient_button(v.$color_2_gradient_start, v.$color_2_gradient_end);
+        }
+        
 
         button:disabled {
-            background: #200225;
-            color: rgb(116, 116, 116);
+            background: #040005;
+            color: rgb(177, 175, 175);
           }
           
 

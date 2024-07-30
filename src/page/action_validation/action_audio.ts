@@ -7,11 +7,11 @@ export class ActionAudioHandler {
     private _event_system: EventSystem;
     private _interval_id : NodeJS.Timeout | null;
     private _frame_loop_id: string | undefined;
-    private _frame_ignore: boolean = true;
+    private _frame_ignore: boolean = false;
 
     constructor(event_system: EventSystem) {
         this._event_system = event_system;
-        this._interval_id = setInterval(this.frame_loop.bind(this), 10000);
+        this._interval_id = setInterval(this.frame_loop.bind(this), 32000);
     }
 
     set_loop_audio(id: string) {

@@ -8,7 +8,7 @@ export const API = Object.freeze({
 });
 
 export const SELF_DOMAIN = 'http://localhost:3000/'
-export const PROD_DOMAIN = 'http://localhost:3000/'
+export const PROD_DOMAIN = 'http://34.127.119.34:3000/'
 
 export const Get_API = function(url: string) {
     return SELF_DOMAIN + url;

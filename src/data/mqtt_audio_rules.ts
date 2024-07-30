@@ -22,7 +22,7 @@ export const Roll_Over_Left_Rules_Audio = new Map<string, Rule_Type[]>([
                 type: 'none',
                 operation: '>',
                 sound_effect: [AudioEventValue.Event044_抬手訓練時誤做抬腳],
-                value: 1
+                value: 2
             },
             {
                 score_id: MQTT_State_Name.body,
@@ -30,7 +30,7 @@ export const Roll_Over_Left_Rules_Audio = new Map<string, Rule_Type[]>([
                 type: 'none',
                 operation: '>',
                 sound_effect: [AudioEventValue.Event045_抬手訓練時誤做翻身],
-                value: 1
+                value: 2
             },
             {
                 score_id: MQTT_State_Name.hand,

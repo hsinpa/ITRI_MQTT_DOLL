@@ -301,14 +301,16 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
             <PageHeader title={i18next.t(material_name)}></PageHeader>
 
             <div className="validation_content">
-            {
-                validationScores.map((x,i)=>{
-                    return <ValidationComponent name={ i18next.t(x.name) } id={i} key={i}
-                    on_click={on_validation_debug_click} 
-                    progress={x.score / 3}
-                    ></ValidationComponent>
-                })
-            }
+                <div className="validation_holder">
+                {
+                    validationScores.map((x,i)=>{
+                        return <ValidationComponent name={ i18next.t(x.name) } id={i} key={i}
+                        on_click={on_validation_debug_click} 
+                        progress={x.score / 3}
+                        ></ValidationComponent>
+                    })
+                }
+                </div>
 
             {
                 displayMessage != '' && 

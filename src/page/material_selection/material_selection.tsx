@@ -7,6 +7,8 @@ import { MQTTServer } from '../../mqtt/mqtt_server'
 import EventSystem from '../../utility/EventSystem'
 import { Fragment, useEffect, useState } from 'react'
 import { AudioEventID } from '../../data/audio_static'
+import itri_logo from '../../assets/texture/sprite/itri-logo-02.png';
+import itri_logo_02 from '../../assets/texture/sprite/afd_logo.png';
 
 interface DetailMatInterface {
     id: string,
@@ -48,7 +50,7 @@ export const MaterialSelectionPage = function({event_system, mqtt_server}: {even
                 let to_address = `/education_video?name=${detail_mat_array[i]}&material=${mat_interface.id}`;
 
                 detail_mats_dom.push(
-                    <Link className='button' key={detail_mat_array[i]} to={to_address}
+                    <Link className='button inner_btn' key={detail_mat_array[i]} to={to_address}
                     onClick={() => event_system.Notify(AudioEventID.ID, {audio: MaterialAudioPair.get(detail_mat_array[i])} ) }>
                         {i18next.t(detail_mat_array[i])}
                     </Link>
@@ -88,6 +90,11 @@ export const MaterialSelectionPage = function({event_system, mqtt_server}: {even
 
                 <Render_detail_mat id={Material_Table.change_cloth} mat_interface={detail_mat_state}></Render_detail_mat>
                 <Render_detail_mat id={Material_Table.cleaning} mat_interface={detail_mat_state}></Render_detail_mat>
+            </div>
+
+            <div className='icon_group'>
+                <img src={itri_logo_02}></img>
+                <img src={itri_logo}></img>
             </div>
         </div>
         </>
