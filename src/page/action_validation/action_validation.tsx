@@ -17,6 +17,8 @@ import { MQTT_Audio_Rules, Roll_Over_Left_Rules_Audio } from "../../data/mqtt_au
 import { ActionAudioHandler } from "./action_audio";
 import { AudioEventID, AudioEventValue } from "../../data/audio_static";
 import { LocalStorageSystem } from "../../mqtt/local_record_system";
+import itri_logo from '../../assets/texture/sprite/itri-logo-02.png';
+import itri_logo_02 from '../../assets/texture/sprite/afd_logo.png';
 
 interface Validation_State_Result {
     index: number,
@@ -297,8 +299,10 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
     }, [validationScores, displayMessage]);
 
     return (
-        <div id="validation_page">
+        <>
             <PageHeader title={i18next.t(material_name)}></PageHeader>
+
+            <div id="validation_page">
 
             <div className="validation_content">
                 <div className="validation_holder">
@@ -319,7 +323,14 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
                     {displayMessage}
                 </div>
             }
+
+            </div>
+
+            <div className='icon_group'>
+                <img src={itri_logo_02}></img>
+                <img src={itri_logo}></img>
             </div>
         </div>
+        </>
     );
 }

@@ -77,24 +77,6 @@
         position: absolute;
     }
 
-    .icon_group {
-        display: flex;
-        position: absolute;
-        bottom: -1.5em;
-        left: 3em;
-        gap: 2em;
-
-        img {
-            object-fit:contain;
-            width: 10em;
-            max-height: 8em;
-        }
-
-        @media (max-width: v.$mobile_max_screen) {
-            left: 0em;
-        }
-    }
-
     .material_selection_comp {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;

@@ -2,13 +2,29 @@
 @use './font.scss' as font;
 
 #validation_page {  
+    position: relative;
 
+    margin: 0 auto;
     background: url("../texture/background/class_selection_background.jpg");
     background-repeat: no-repeat;
     background-position: center bottom;
     background-size: contain;
-    background-attachment: fixed;
+  
     height: 100vh;
+  
+    max-width: v.$max_width;  
+
+    .icon_group {
+        bottom: 2em;
+    }
+
+    // position: relative;
+    // background: url("../texture/background/class_selection_background.jpg");
+    // background-repeat: no-repeat;
+    // background-position: center bottom;
+    // background-size: contain;
+    // background-attachment: fixed;
+    // height: 100vh;
 
     .validation_content {
         margin: 0 auto;

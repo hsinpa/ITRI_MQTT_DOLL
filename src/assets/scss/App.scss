@@ -11,6 +11,24 @@
   color: red;
 }
 
+.icon_group {
+  display: flex;
+  position: absolute;
+  bottom: -1.5em;
+  left: 3em;
+  gap: 2em;
+
+  img {
+      object-fit:contain;
+      width: 10em;
+      max-height: 8em;
+  }
+
+  @media (max-width: v.$mobile_max_screen) {
+      left: 0em;
+  }
+}
+
 #app_page {
   margin: 0 auto;
   background: url("../texture/background/login_background.jpg");
