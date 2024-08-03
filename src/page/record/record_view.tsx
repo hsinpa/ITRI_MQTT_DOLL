@@ -40,8 +40,10 @@ export const Record_View = function({event_system, mqtt_server, local_storage_sy
     const navigate = useNavigate();
     const [records, setRecords] = useState<HistoryRecord[]>([]);
     useEffect(() => {
-        setRecords(local_storage_sys.records);
-        console.log(local_storage_sys.records)
+        let sort_records = local_storage_sys.records.sort(function(a,b){return new Date(a.timestamp) .getTime() - new Date(b.timestamp).getTime()})
+        console.log(sort_records)
+
+        setRecords(sort_records);
     }, []);
 
     return (
