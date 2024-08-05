@@ -84,9 +84,9 @@ export const LoginPage = function({event_system, account_system}: {event_system:
             <p>{i18next.t('password')}</p>
             <input className='input' type="password" placeholder='*******'></input>
             </div>
-            <Link className='forget_password' to='/#forget_password'>{i18next.t('forget_password')}</Link>
+            {/* <Link className='forget_password' to='/#forget_password'>{i18next.t('forget_password')}</Link> */}
             <button className='button login_btn' onClick={on_login_click}>{i18next.t('login')}</button>
-            <Link className='button' to='/register'>{i18next.t('register')}</Link>
+            {/* <Link className='button' to='/register'>{i18next.t('register')}</Link> */}
       </div>
     );
 }
