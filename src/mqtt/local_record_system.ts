@@ -1,29 +1,71 @@
 import { json } from "react-router-dom";
 import { HistoryRecord } from "../data/static_share_varaible";
+import { AccountSystem } from "../utility/AccountSystem";
+import { API, Get_API } from "../data/api_static";
+import { FormatString } from "../utility/UtilityFunc";
 
 const KEY = 'records';
 export class LocalStorageSystem {
     private _local_records: HistoryRecord[] = [];
+    private _account: AccountSystem;
 
-    constructor() {
+
+    constructor(account: AccountSystem) {
+        this._account = account;
         let records = localStorage.getItem(KEY);
         
         if (records != null) {
             this._local_records = JSON.parse(records);
         }
+
+        let info = this.account.get_info();
+        console.log(info);
     }
 
-    get records() {
-        return this._local_records;
+    get account() {
+        return this._account;
     }
 
-    push_records(h_record: HistoryRecord) {
-        this._local_records = [...this._local_records, h_record];
-        localStorage.setItem(KEY, JSON.stringify(this._local_records));
+    async get_records(): Promise<HistoryRecord[] | null> {
+        let info = this.account.get_info();
+        let token = await this.account.get_token();
+
+        try {
+            if (info != null && token != null) {            
+                let url =  Get_API(API.ReadData);
+                let fetch_r = await fetch(url, {headers: {'Content-Type': 'application/json' },
+                    method:'post',
+                    body: JSON.stringify({'token': token, 'caregiverId':info.id, 'hospitalId': info.hospitalId })
+                });
+    
+                let fetch_json = await fetch_r.json();
+                return fetch_json['data'];
+            }
+        } catch {
+
+        }
+
+        return null;
     }
 
-    update_records() {
+    async push_records(h_record: HistoryRecord) {
+        // this._local_records = [...this._local_records, h_record];
+        // localStorage.setItem(KEY, JSON.stringify(this._local_records));
+        let info = this.account.get_info();
+        let token = await this.account.get_token();
 
+        if (info != null && token != null) {
+            h_record.remark = info.name;
+            h_record.caregiverId = info.id;
+            
+            let url =  Get_API(FormatString(API.UploadData, [info.hospitalId, token]));
+            let fetch_r =  await fetch(url, {headers: {'Content-Type': 'application/json', 'Authorization': token },
+                        method:'post',
+                        body: JSON.stringify(h_record)})
+
+            console.log(await fetch_r.json());
+
+        }
     }
 
     delete_records(id: string) {

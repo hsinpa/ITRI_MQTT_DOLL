@@ -97,24 +97,20 @@ export interface MQTTEvent {
 
 export interface HistoryRecord { 
     caregiverId: string
-    name: string,
     time: string,
     title: string,
-    is_complete: boolean,
+    completeness: number,
     errorPrompt: string[],
-    timestamp: number,
     remark?: string,
 }
 
 export function get_empty_record(): HistoryRecord {
     return {
         caregiverId: uuidv4(),
-        name: '',
         time: '',
         title: '',
-        is_complete: false,
+        completeness: 0,
         errorPrompt: [],
-        timestamp: 0,
         remark: '',
     }
 }

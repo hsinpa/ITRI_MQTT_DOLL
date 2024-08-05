@@ -7,8 +7,9 @@ import { fetch_json } from "../../utility/HttpFunc";
 import { API, Get_API } from "../../data/api_static";
 import { useEffect, useState } from "react";
 import store from "store2";
+import { AccountSystem } from "../../utility/AccountSystem";
 
-export const LoginPage = function({event_system}: {event_system: EventSystem}) {
+export const LoginPage = function({event_system, account_system}: {event_system: EventSystem, account_system: AccountSystem}) {
     const navigate = useNavigate();
     const [errorMsg, setErrorMsg] = useState('');
 
@@ -26,34 +27,46 @@ export const LoginPage = function({event_system}: {event_system: EventSystem}) {
             return;
         
         login_btn.disabled = true;
-
-        try {
-            let result = await fetch_json(Get_API(API.Login), 'post', {'email': email_dom.value, 'password': password_dom.value});
-            
-            if (result['success']) {
-                store.set('email', email_dom.value);
-                store.set('user_id', result['data']['id']);
-                store.set('name', result['data']['name']);
-
-                event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event002_線上模式起動});
-                navigate('/action_page')
-                return;
-            }
-
-        } catch {
+        let result = await account_system.login(email_dom.value, password_dom.value)
+        if (result) {
             event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event002_線上模式起動});
             navigate('/action_page')
+            return;
+        }
+
+        try {
+            // let result = await fetch_json(Get_API(API.Login), 'post', {'email': email_dom.value, 'password': password_dom.value});
+            
+            // if (result['success']) {
+            //     store.set('email', email_dom.value);
+            //     store.set('user_id', result['data']['id']);
+            //     store.set('name', result['data']['name']);
+
+            //     event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event002_線上模式起動});
+            //     navigate('/action_page')
+            //     return;
+            // }
+
+        } catch(e) {
+            // event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event002_線上模式起動});
+            // navigate('/action_page')
         }
 
         setErrorMsg('帳號密碼錯誤')
         login_btn.disabled = false;
     }
 
-    useEffect(() => {
-        if (store.has('user_id')){
+    let auto_login = async function() {
+        let token = await account_system.refresh_token();
+
+        if (token != null) {
             event_system.Notify(AudioEventID.ID, {audio:AudioEventValue.Event002_線上模式起動});
             navigate('/action_page')
         }
+    }
+
+    useEffect( () => {
+        auto_login();
     }, []);
 
     return (

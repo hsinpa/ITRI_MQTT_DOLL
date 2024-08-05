@@ -118,7 +118,7 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
         return local_val_state;
     }
 
-    let process_rule = function(rule: Rule_Type) {
+    let process_rule = async function(rule: Rule_Type) {
         if (rule == null || rule.trigger_events == null) return;
 
         console.log('process_rule', rule);
@@ -148,10 +148,14 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
         
         if (index >= validation_table.length - 1) {
             validationFulfilled = true;
+
+            local_record.completeness = 100;
+            local_record.time = new Date().toUTCString();
+            record.push_records(local_record);
+
             setValidationFulfilled(true);
             setDisplayMessage(t("stage_complete"))
 
-            local_record.is_complete = true;
             mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTLightBulbIn.ID), MQTTLightBulbIn.Bulb_3);
 
             event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event055_此培訓操作已完成, force_play: true});
@@ -255,9 +259,8 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
         console.log("ActionValidationPage");
         cancellation_token.is_cancel = false;
         local_record = get_empty_record();
-        local_record.is_complete = false;
+        local_record.completeness = 0;
         local_record.title = i18next.t(material_name);
-        local_record.name = '測試員';
 
         set_val_state(validation_table[0]);
 
@@ -277,10 +280,6 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
             if (validationFulfilled) {
                 event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event056_感謝您的體驗, force_play: true});
             }
-
-            local_record.timestamp = new Date().getTime();
-            local_record.time = new Date().toUTCString();
-            record.push_records(local_record);
 
             validation_score_map.clear();
             cancellation_token.is_cancel = true;

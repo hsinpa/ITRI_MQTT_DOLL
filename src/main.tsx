@@ -22,6 +22,7 @@ import AudioSystem from './utility/audio/AudioSystem.ts'
 import { LoginRegister } from './page/account/account_register.tsx'
 import { Record_View } from './page/record/record_view.tsx'
 import { LocalStorageSystem } from './mqtt/local_record_system.ts'
+import { AccountSystem } from './utility/AccountSystem.ts'
 
 i18next.init({
   lng: 'zh_tw',
@@ -33,8 +34,10 @@ i18next.init({
   }
 });
 
+const account_system = new AccountSystem();
 const event_system = new EventSystem();
-const local_storage_sys = new LocalStorageSystem();
+
+const local_storage_sys = new LocalStorageSystem(account_system);
 const audio_system = new AudioSystem(event_system);
 const mqtt_server = new MQTTServer(event_system);
       mqtt_server.connect(API.MQTT_URL);
@@ -42,7 +45,7 @@ const mqtt_server = new MQTTServer(event_system);
 const router = createHashRouter([
   {
     path: "/",
-    element: <App event_system={event_system} mqtt_server={mqtt_server}/>,
+    element: <App event_system={event_system} account_system={account_system} mqtt_server={mqtt_server}/>,
   },
   {
     path: "/register",

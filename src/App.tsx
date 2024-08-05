@@ -9,13 +9,14 @@ import i18next from 'i18next';
 import itri_logo from './assets/texture/sprite/itri-logo.png';
 import { AudioEventID, AudioEventValue } from './data/audio_static';
 import { LoginPage } from './page/account/account_login';
+import { AccountSystem } from './utility/AccountSystem';
 
 
-function App({event_system, mqtt_server}: {event_system: EventSystem, mqtt_server: MQTTServer}) {
+function App({event_system, account_system, mqtt_server}: {event_system: EventSystem, account_system: AccountSystem, mqtt_server: MQTTServer}) {
 
   return (
     <div id='app_page'>
-      <LoginPage event_system={event_system}></LoginPage>
+      <LoginPage  event_system={event_system} account_system={account_system}></LoginPage>
     </div>
   )
 }

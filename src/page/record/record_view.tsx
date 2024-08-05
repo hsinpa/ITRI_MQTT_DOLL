@@ -10,9 +10,10 @@ import moment from "moment"
 import { FormatString } from "../../utility/UtilityFunc"
 import { AudioEventID, AudioEventValue } from "../../data/audio_static"
 import { useNavigate } from "react-router-dom";
+import { AccountInterface } from "../../data/api_static"
 
 
-const Record_Row_View = function({record}: {record: HistoryRecord}) {
+const Record_Row_View = function({record, user_info}: {record: HistoryRecord, user_info: AccountInterface | null}) {
     const [is_error_reveal, set_error_reveal] = useState(false);
 
     let error_msg = FormatString(i18next.t('record_error_message'), [record.errorPrompt.length]);
@@ -26,9 +27,9 @@ const Record_Row_View = function({record}: {record: HistoryRecord}) {
 
     return (
     <tr>
-        <td>{record.name}</td>
+        <td>{  user_info?.name }</td>
         <td>{ moment(new Date(record.time)).format("YYYY-MM-DD HH:mm")  }</td>
-        <td>{ record.is_complete ? i18next.t('record_complete') : i18next.t('record_non_complete')}</td>
+        <td>{ record.completeness == 100 ? i18next.t('record_complete') : i18next.t('record_non_complete')}</td>
         <td>{record.title}</td>
         <td className="error_msg" onClick={on_error_msg_click}>{is_error_reveal ? detail_error_msg : error_msg}</td>
         <td>{i18next.t('record_none')}</td>
@@ -39,11 +40,22 @@ export const Record_View = function({event_system, mqtt_server, local_storage_sy
                                      {event_system: EventSystem, mqtt_server: MQTTServer, local_storage_sys: LocalStorageSystem}) {
     const navigate = useNavigate();
     const [records, setRecords] = useState<HistoryRecord[]>([]);
-    useEffect(() => {
-        let sort_records = local_storage_sys.records.sort(function(a,b){return new Date(a.timestamp) .getTime() - new Date(b.timestamp).getTime()})
+    const user_info = local_storage_sys.account.get_info();
+    
+    const fetch_records = async function() {        
+        let sort_records = await local_storage_sys.get_records();
         console.log(sort_records)
 
+        if (sort_records == null) {
+            navigate('/');
+            return;
+        }
+        sort_records = sort_records.sort(function(a,b){return new Date(Date.parse(a.time)) .getTime() - new Date(Date.parse(b.time)).getTime()})
         setRecords(sort_records);
+    }
+
+    useEffect(() => {
+        fetch_records();
     }, []);
 
     return (
@@ -69,7 +81,7 @@ export const Record_View = function({event_system, mqtt_server, local_storage_sy
 
                 <tbody>
                     {
-                        records.reverse().map(x=> <Record_Row_View key={x.caregiverId} record={x}></Record_Row_View>)
+                        records.reverse().map(x=> <Record_Row_View key={x.caregiverId} user_info={user_info} record={x}></Record_Row_View>)
                     }
                 </tbody>
             </table>
