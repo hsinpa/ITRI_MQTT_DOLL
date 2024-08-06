@@ -32,7 +32,7 @@ export const LoginRegister = function({event_system}: {event_system: EventSystem
         login_btn.disabled = true;
 
         try {
-            let result = await fetch_json(Get_API(API.Register), 'post', 
+            let result = await fetch_json(Get_API(API.Login), 'post', 
             {'email': email_dom.value, 'password': password_dom.value,
             "permission": "admin", "name": "web", "CountryCode": "ROG", "jobPosition": "doctor", "hospitalId": "web"});
             
