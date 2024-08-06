@@ -40,8 +40,25 @@ export const DollDropdown = function({selected_option, options, select_callback}
         navigate('/');
     }
 
+    let on_export = function() {
+        let records = localStorage.getItem('records');
+        if (records == null) return;
+
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(records));
+        element.setAttribute('download', 'MQTT JSON Record');
+      
+        element.style.display = 'none';
+        document.body.appendChild(element);
+      
+        element.click();
+      
+        document.body.removeChild(element);
+    }
+
     return (
         <div className="dropdown doll-dropdown" >
+            <button className='button logout' onClick={on_export}>匯出</button>
             <button className='button logout' onClick={on_logout}>登出</button>
 
             <div className="dropdown-trigger">

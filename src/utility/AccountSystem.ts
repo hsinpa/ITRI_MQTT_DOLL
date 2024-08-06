@@ -51,7 +51,7 @@ export class AccountSystem {
             var now = new Date();
 
             var one_hour_timestamp = Math.floor((new Date(now.getTime() + 60 * 60000)).getTime()/ 1000);
-          
+            console.log(result);
             if (result['success']) {
                 let info: AccountInterface = {
                     email: email,

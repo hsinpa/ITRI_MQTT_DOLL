@@ -26,8 +26,14 @@ export const LoginPage = function({event_system, account_system}: {event_system:
         if (login_btn == undefined || email_dom == undefined || password_dom == undefined)
             return;
         
+        if (email_dom.value == '' ||  password_dom.value == '') {
+            setErrorMsg('帳號密碼不能為空')
+            return;
+        }
+
         login_btn.disabled = true;
         let result = await account_system.login(email_dom.value, password_dom.value)
+
         if (result) {
             event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event002_線上模式起動});
             navigate('/action_page')
