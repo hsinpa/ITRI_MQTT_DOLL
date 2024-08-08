@@ -101,11 +101,13 @@ export interface HistoryRecord {
     title: string,
     completeness: number,
     errorPrompt: string[],
+    id?: string,
     remark?: string,
 }
 
 export function get_empty_record(): HistoryRecord {
     return {
+        id: '',
         caregiverId: uuidv4(),
         time: '',
         title: '',

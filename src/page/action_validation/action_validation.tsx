@@ -256,6 +256,8 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
     }
 
     useEffect(() => {
+        record.account.refresh_token();
+
         console.log("ActionValidationPage");
         cancellation_token.is_cancel = false;
         local_record = get_empty_record();
@@ -274,7 +276,6 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
 
         let start_audio_id = TrainingStartAudioPair.get(material_name)
         if (start_audio_id != null )event_system.Notify(AudioEventID.ID, {audio: start_audio_id, force_play: true});
-
 
         return () => {
             if (validationFulfilled) {

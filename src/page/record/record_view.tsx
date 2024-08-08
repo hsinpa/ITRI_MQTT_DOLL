@@ -81,7 +81,7 @@ export const Record_View = function({event_system, mqtt_server, local_storage_sy
 
                 <tbody>
                     {
-                        records.reverse().map(x=> <Record_Row_View key={x.caregiverId} user_info={user_info} record={x}></Record_Row_View>)
+                        records.reverse().map(x=> <Record_Row_View key={x.id} user_info={user_info} record={x}></Record_Row_View>)
                     }
                 </tbody>
             </table>
