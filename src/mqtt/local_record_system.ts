@@ -9,7 +9,6 @@ export class LocalStorageSystem {
     private _local_records: HistoryRecord[] = [];
     private _account: AccountSystem;
 
-
     constructor(account: AccountSystem) {
         this._account = account;
         let records = localStorage.getItem(KEY);
@@ -53,9 +52,11 @@ export class LocalStorageSystem {
         // localStorage.setItem(KEY, JSON.stringify(this._local_records));
         let info = this.account.get_info();
         let token = await this.account.get_token();
+        let incremental_id_str = localStorage.getItem('incremental_id') || '1';
+        let incremental_id = Number.parseInt(incremental_id_str);
 
         if (info != null && token != null) {
-            h_record.remark = info.name;
+            h_record.remark = info.name + " " + incremental_id;
             h_record.caregiverId = info.id;
             
             let url =  Get_API(FormatString(API.UploadData, [info.hospitalId, token]));
@@ -65,6 +66,7 @@ export class LocalStorageSystem {
 
             console.log(await fetch_r.json());
 
+            localStorage.setItem('incremental_id', (incremental_id).toString());
         }
     }
 

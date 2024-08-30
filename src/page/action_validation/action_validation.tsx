@@ -11,7 +11,6 @@ import { get_empty_record, HistoryRecord, MQTTEvent, MQTTFrontModeOut, MQTTLight
 import { CancellationToken, Clamp, deep_clone_map, deep_clone_object, DoDelayAction, FormatString } from "../../utility/UtilityFunc";
 import { MQTT_Action_Rules, Rule_Type } from "../../data/mqtt_action_rules";
 import { process_msg_event, rule_matching } from "./validation_utility";
-import { useUserInfoStore } from "./validation_zusland";
 import exclamation_icon from '../../assets/texture/sprite/exclamation.svg';
 import { MQTT_Audio_Rules, Roll_Over_Left_Rules_Audio } from "../../data/mqtt_audio_rules";
 import { ActionAudioHandler } from "./action_audio";
@@ -171,7 +170,7 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
     let on_message_event = function(event_id: string, message: Buffer) {
         if (validationFulfilled) return;
 
-        console.log('validation_score_map', validation_score_map)
+        console.log('validation_score_map', validation_score_map);
         let revert_event_id = event_id.replace(mqtt_server.client_id, "{0}");
 
         let max_score = 3;

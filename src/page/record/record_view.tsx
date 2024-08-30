@@ -25,6 +25,8 @@ const Record_Row_View = function({record, user_info}: {record: HistoryRecord, us
         set_error_reveal(!is_error_reveal);
     }
 
+    let remark_text = (record.remark != undefined && record.remark != '') ? record.remark : i18next.t('record_none');
+
     return (
     <tr>
         <td>{  user_info?.name }</td>
@@ -32,7 +34,7 @@ const Record_Row_View = function({record, user_info}: {record: HistoryRecord, us
         <td>{ record.completeness == 100 ? i18next.t('record_complete') : i18next.t('record_non_complete')}</td>
         <td>{record.title}</td>
         <td className="error_msg" onClick={on_error_msg_click}>{is_error_reveal ? detail_error_msg : error_msg}</td>
-        <td>{i18next.t('record_none')}</td>
+        <td>{remark_text}</td>
     </tr>)
 }
 
