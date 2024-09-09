@@ -4,6 +4,11 @@ export const API = Object.freeze({
     MQTT_URL : "wss://broker.mqttgo.io:8084/mqtt"
 });
 
+export interface MQTTModeType {
+    id: string,
+    action_code: number
+}
+
 export const MQTTFrontModeOut = Object.freeze({
     ID : "ITRI/照護人{0}/正面模式發",
 

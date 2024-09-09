@@ -1,6 +1,6 @@
 import { AudioEventValue } from "./audio_static";
 import { MCUResultInEvent } from "./static_flow_variable";
-import { MQTTFrontModeOut } from "./static_share_varaible";
+import { MQTTBackModeOut, MQTTFrontModeOut, MQTTModeType } from "./static_share_varaible";
 
 export const Material_Table = Object.freeze({
     'roll_over':'roll_over',
@@ -16,18 +16,25 @@ export const MQTT_Action_Name = Object.freeze({
     'roll_over_left':'roll_over_left',
     'roll_over_right':'roll_over_right',
 
-    'pat_back':'pat_back',
+    'pat_back_left':'pat_back_left',
+    'pat_back_right':'pat_back_right',
 });
 
 export const MQTT_State_Name = Object.freeze({
     'hand':'hand',
     'knee':'knee',
     'body':'body',
+
+    'lung_upper':'lung_upper',
+    'lung_center':'lung_center',
+    'lung_bottom':'lung_bottom',
 });
 
-export const MQTT_Action_MQTT =  new Map<string, number> ([
-    [MQTT_Action_Name.roll_over_left, MQTTFrontModeOut.Left_MCU_Read_Action],
-    [MQTT_Action_Name.roll_over_right, MQTTFrontModeOut.Right_MCU_Read_Action],
+export const MQTT_Action_MQTT =  new Map<string, MQTTModeType> ([
+    [MQTT_Action_Name.roll_over_left, {id: MQTTFrontModeOut.ID, action_code: MQTTFrontModeOut.Left_MCU_Read_Action}],
+    [MQTT_Action_Name.roll_over_right, {id: MQTTFrontModeOut.ID, action_code: MQTTFrontModeOut.Right_MCU_Read_Action}],
+    [MQTT_Action_Name.pat_back_left, {id: MQTTFrontModeOut.ID, action_code: MQTTBackModeOut.Left_MCU_Read_Action}],
+    [MQTT_Action_Name.pat_back_right, {id: MQTTFrontModeOut.ID, action_code: MQTTBackModeOut.Right_MCU_Read_Action}],
 ]);
 
 export const MQTT_Material_Video =  new Map<string, string> ([
@@ -44,7 +51,7 @@ export interface Validation_Score {
 
 export const MaterialDetailsLookUp = new Map<string, string[]> ([
     [Material_Table.roll_over, [MQTT_Action_Name.roll_over_left, MQTT_Action_Name.roll_over_right]],
-    [Material_Table.pat_back, []]
+    [Material_Table.pat_back, [MQTT_Action_Name.pat_back_left, MQTT_Action_Name.pat_back_right]]
 ]);
 
 export const MaterialAudioPair = new Map<string, string> ([
@@ -98,6 +105,27 @@ export const MQTT_Action_Validation = new Map<string, Validation_Score[]>(
             'validation_list': [MCUResultInEvent.Body],
             'score': 0,
             'idle_audio_id': AudioEventValue.Event039_請抓照護者左肩胛及左髖部進行右翻
+        } ]
+    ],
+    [
+        MQTT_Action_Name.pat_back_left,  [
+        {
+            'name': MQTT_State_Name.lung_bottom,
+            'validation_list': [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
+            'score': 0,
+            'idle_audio_id': ""
+        },
+        {
+            'name': MQTT_State_Name.lung_center,
+            'validation_list': [MCUResultInEvent.LeftKneeFlex, MCUResultInEvent.LeftKneeIMU],
+            'score': 0,
+            'idle_audio_id': ""
+        },
+        {
+            'name': MQTT_State_Name.lung_upper,
+            'validation_list': [MCUResultInEvent.Body],
+            'score': 0,
+            'idle_audio_id': ""
         } ]
     ]
 ]);

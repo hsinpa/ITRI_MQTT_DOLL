@@ -268,8 +268,8 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
         validation_score_map.clear();
         register_event(event_system, mqtt_server, validationScores, on_message_event)
 
-        let action_id = MQTT_Action_MQTT.get(material_name);
-        if (action_id != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTFrontModeOut.ID), action_id);
+        let mqtt_action = MQTT_Action_MQTT.get(material_name);
+        if (mqtt_action != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(mqtt_action.id), mqtt_action.action_code);
 
         mqtt_server.send(mqtt_server.get_mqtt_cmd(MQTTLightBulbIn.ID), MQTTLightBulbIn.All_Off);
 

@@ -8,6 +8,12 @@
 
     "roll_over_left":"左翻",
     "roll_over_right":"右翻",
+    "pat_back_left":"左拍背",
+    "pat_back_right":"右拍背",
+    
+    "lung_upper":"肺上葉",
+    "lung_center":"肺中葉",
+    "lung_bottom":"肺下葉",
 
     "hand":"抬手",
     "knee":"抬腳",
