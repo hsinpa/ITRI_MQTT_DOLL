@@ -15,6 +15,20 @@ const EVENT_LISTENER_LIST = [
     MCUResultInEvent.RightArmIMU,
     MCUResultInEvent.RightKneeFlex,
     MCUResultInEvent.RightKneeIMU,
+
+    MCUResultInEvent.LeftBackBottomCount,
+    MCUResultInEvent.LeftBackBottomPower,
+    MCUResultInEvent.LeftBackCenterCount,
+    MCUResultInEvent.LeftBackCenterPower,
+    MCUResultInEvent.LeftBackUpCount,
+    MCUResultInEvent.LeftBackUpPower,
+
+    MCUResultInEvent.RightBackBottomCount,
+    MCUResultInEvent.RightBackBottomPower,
+    MCUResultInEvent.RightBackCenterCount,
+    MCUResultInEvent.RightBackCenterPower,
+    MCUResultInEvent.RightBackUpCount,
+    MCUResultInEvent.RightBackUpPower,
 ]
 
 export class MqttEventListener {
@@ -38,7 +52,7 @@ export class MqttEventListener {
     }
 
     public on_message(topic: string, payload: Buffer, packet: IPublishPacket) {
-        console.log('on message ' + topic + ", " + payload);
+        // console.log('on message ' + topic + ", " + payload);
         this._event_sytem.Notify(topic, payload);
     }
 }

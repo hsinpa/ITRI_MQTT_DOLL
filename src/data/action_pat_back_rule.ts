@@ -61,7 +61,7 @@ export const Pat_Back_Right_Rules = new Map<string, Rule_Type[]>([
         [
             {
                 score_id: MQTT_State_Name.lung_center,
-                matches: [MCUResultInEvent.RightBackCenterCount, MCUResultInEvent.LeftBackCenterPower],
+                matches: [MCUResultInEvent.RightBackCenterCount, MCUResultInEvent.RightBackCenterPower],
                 trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.Bulb_2}],
                 type: 'success',
                 operation: '==',

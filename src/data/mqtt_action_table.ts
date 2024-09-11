@@ -33,8 +33,8 @@ export const MQTT_State_Name = Object.freeze({
 export const MQTT_Action_MQTT =  new Map<string, MQTTModeType> ([
     [MQTT_Action_Name.roll_over_left, {id: MQTTFrontModeOut.ID, action_code: MQTTFrontModeOut.Left_MCU_Read_Action}],
     [MQTT_Action_Name.roll_over_right, {id: MQTTFrontModeOut.ID, action_code: MQTTFrontModeOut.Right_MCU_Read_Action}],
-    [MQTT_Action_Name.pat_back_left, {id: MQTTFrontModeOut.ID, action_code: MQTTBackModeOut.Left_MCU_Read_Action}],
-    [MQTT_Action_Name.pat_back_right, {id: MQTTFrontModeOut.ID, action_code: MQTTBackModeOut.Right_MCU_Read_Action}],
+    [MQTT_Action_Name.pat_back_left, {id: MQTTBackModeOut.ID, action_code: MQTTBackModeOut.Left_MCU_Read_Action}],
+    [MQTT_Action_Name.pat_back_right, {id: MQTTBackModeOut.ID, action_code: MQTTBackModeOut.Right_MCU_Read_Action}],
 ]);
 
 export const MQTT_Material_Video =  new Map<string, string> ([
@@ -111,19 +111,40 @@ export const MQTT_Action_Validation = new Map<string, Validation_Score[]>(
         MQTT_Action_Name.pat_back_left,  [
         {
             'name': MQTT_State_Name.lung_bottom,
-            'validation_list': [MCUResultInEvent.LeftArmFlex, MCUResultInEvent.LeftArmIMU],
+            'validation_list': [MCUResultInEvent.LeftBackBottomPower, MCUResultInEvent.LeftBackBottomCount],
             'score': 0,
             'idle_audio_id': ""
         },
         {
             'name': MQTT_State_Name.lung_center,
-            'validation_list': [MCUResultInEvent.LeftKneeFlex, MCUResultInEvent.LeftKneeIMU],
+            'validation_list': [MCUResultInEvent.LeftBackCenterCount, MCUResultInEvent.LeftBackCenterPower],
             'score': 0,
             'idle_audio_id': ""
         },
         {
             'name': MQTT_State_Name.lung_upper,
-            'validation_list': [MCUResultInEvent.Body],
+            'validation_list': [MCUResultInEvent.LeftBackUpCount,MCUResultInEvent.LeftBackUpPower],
+            'score': 0,
+            'idle_audio_id': ""
+        } ]
+    ],
+    [
+        MQTT_Action_Name.pat_back_right,  [
+        {
+            'name': MQTT_State_Name.lung_bottom,
+            'validation_list': [MCUResultInEvent.RightBackBottomCount, MCUResultInEvent.RightBackBottomPower],
+            'score': 0,
+            'idle_audio_id': ""
+        },
+        {
+            'name': MQTT_State_Name.lung_center,
+            'validation_list': [MCUResultInEvent.RightBackCenterCount, MCUResultInEvent.RightBackCenterPower],
+            'score': 0,
+            'idle_audio_id': ""
+        },
+        {
+            'name': MQTT_State_Name.lung_upper,
+            'validation_list': [MCUResultInEvent.RightBackUpCount, MCUResultInEvent.RightBackUpPower],
             'score': 0,
             'idle_audio_id': ""
         } ]
