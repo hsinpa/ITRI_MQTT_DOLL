@@ -26,9 +26,9 @@ export const EducationVideoPage = function({event_system, mqtt_server}: {event_s
         let mqtt_action = MQTT_Action_MQTT.get(video_name);
         if (mqtt_action == null) return;
 
-        // if (mqtt_action != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(mqtt_action.id), 0);           
+        if (mqtt_action != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(mqtt_action.id), 0);           
 
-        if (mqtt_action != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(mqtt_action.id), mqtt_action.action_code);           
+        // if (mqtt_action != null) mqtt_server.send(mqtt_server.get_mqtt_cmd(mqtt_action.id), mqtt_action.action_code);           
         
         event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event007_影片引導});
 

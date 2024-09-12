@@ -54,7 +54,7 @@ export class MQTTServer {
         if (this._mqtt_client == null) return;
         
         let cmd_id =  this.get_mqtt_cmd(command_id);
-        console.log(`Event Send ${cmd_id}, ${command_value}`);
+        // console.log(`Event Send ${cmd_id}, ${command_value}`);
 
         this._mqtt_client.publish(cmd_id,  command_value.toString() );
     }
