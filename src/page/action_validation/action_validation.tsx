@@ -10,7 +10,7 @@ import i18next, { t } from "i18next";
 import { get_empty_record, HistoryRecord, MQTTEvent, MQTTFrontModeOut, MQTTLightBulbIn } from "../../data/static_share_varaible";
 import { CancellationToken, Clamp, deep_clone_map, deep_clone_object, DoDelayAction, FormatString } from "../../utility/UtilityFunc";
 import { MQTT_Action_Rules, Rule_Type } from "../../data/mqtt_action_rules";
-import { process_msg_event, rule_matching } from "./validation_utility";
+import { process_msg_event, rule_matching, single_audio_rule_matching } from "./validation_utility";
 import exclamation_icon from '../../assets/texture/sprite/exclamation.svg';
 import { MQTT_Audio_Rules, Roll_Over_Left_Rules_Audio } from "../../data/mqtt_audio_rules";
 import { ActionAudioHandler } from "./action_audio";
@@ -171,7 +171,7 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
         if (validationFulfilled) return;
 
         console.log('validation_score_map', validation_score_map);
-        let revert_event_id = event_id.replace(mqtt_server.client_id, "{0}");
+        let revert_event_id = event_id.replace(mqtt_server.client_id, "{0}"); // Replace ID to {0}, for purpose
 
         let max_score = 3;
         let validation_scores = get_validation_scores(event_id, validationScores, validation_score_map, mqtt_server);
@@ -201,8 +201,17 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
 
         // Play Audio 
         if (audio_rule != null) {
+            console.log(revert_event_id, local_val_state, audio_rule, clone_validation_score_obj);
             let audio_match_result = rule_matching(revert_event_id, local_val_state, audio_rule, clone_validation_score_obj);
-            if (audio_match_result != null) audio_handler.play(audio_match_result);
+            let single_audio_match_result = single_audio_rule_matching(revert_event_id, score, audio_rule);
+
+            if (single_audio_match_result != null) {
+                console.log(single_audio_match_result)
+                audio_handler.play(single_audio_match_result);
+            }
+            else if (audio_match_result != null) {
+                audio_handler.play(audio_match_result);
+            }
         }
 
         if (!process_msg_event(revert_event_id, rule)) return;
@@ -256,7 +265,6 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
 
     useEffect(() => {
         record.account.refresh_token();
-
         console.log("ActionValidationPage");
         cancellation_token.is_cancel = false;
         local_record = get_empty_record();
@@ -280,7 +288,7 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
             if (validationFulfilled) {
                 event_system.Notify(AudioEventID.ID, {audio: AudioEventValue.Event056_感謝您的體驗, force_play: true});
             }
-
+            
             validation_score_map.clear();
             cancellation_token.is_cancel = true;
             local_val_state = '';

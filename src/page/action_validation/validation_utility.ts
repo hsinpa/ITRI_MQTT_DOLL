@@ -12,6 +12,18 @@ export let process_msg_event = function(target_event_id: string, rules: Rule_Typ
     return false
 } 
 
+export let single_audio_rule_matching = function(target_event_id: string, score: number, rules: Rule_Type[]) {
+
+    for (let r_index = 0; r_index < rules.length; r_index++) {
+        let rule: Rule_Type = rules[r_index];
+        if (rule.matches.length !=  1) continue;
+
+        if (rule.matches[0] == target_event_id && ops_query(score, rule.value, rule.operation)) return rule;
+    }
+
+    return null;
+}
+
 export let rule_matching = function(target_event_id: string, state: string, rules: Rule_Type[], validation_scores: Validation_Score[]) {
 
     for (let r_index = 0; r_index < rules.length; r_index++) {
@@ -25,7 +37,7 @@ export let rule_matching = function(target_event_id: string, state: string, rule
     }
 
     return null;
-} 
+}
 
 let ops_query = function(value: number, constraint: number, ops: string) {
 

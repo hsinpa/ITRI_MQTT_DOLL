@@ -27,10 +27,15 @@ const Record_Row_View = function({record, user_info}: {record: HistoryRecord, us
 
     let remark_text = (record.remark != undefined && record.remark != '') ? record.remark : i18next.t('record_none');
 
+    console.log(record.time)
+
+    let date = new Date(record.time);
+    date.setHours(date.getHours() + 8);
+
     return (
     <tr>
         <td>{  user_info?.name }</td>
-        <td>{ moment(new Date(record.time)).format("YYYY-MM-DD HH:mm")  }</td>
+        <td>{ moment(date).format("YYYY-MM-DD HH:mm")  }</td>
         <td>{ record.completeness == 100 ? i18next.t('record_complete') : i18next.t('record_non_complete')}</td>
         <td>{record.title}</td>
         <td className="error_msg" onClick={on_error_msg_click}>{is_error_reveal ? detail_error_msg : error_msg}</td>

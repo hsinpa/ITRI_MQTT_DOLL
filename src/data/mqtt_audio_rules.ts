@@ -1,6 +1,7 @@
 import { AudioEventValue } from "./audio_static";
 import { Rule_Type } from "./mqtt_action_rules";
 import { MQTT_Action_Name, MQTT_State_Name } from "./mqtt_action_table";
+import { PAT_BACK_Left_Rules_Audio, PAT_BACK_Right_Rules_Audio } from "./mqtt_audio_patback_rules";
 import { MCUResultInEvent } from "./static_flow_variable";
 import { MQTTLightBulbIn } from "./static_share_varaible";
 
@@ -234,6 +235,9 @@ export const Roll_Over_Right_Rules_Audio = new Map<string, Rule_Type[]>([
 export const MQTT_Audio_Rules = new Map<string, Map<string, Rule_Type[]> >(
     [
         [MQTT_Action_Name.roll_over_left, Roll_Over_Left_Rules_Audio],
-        [MQTT_Action_Name.roll_over_right, Roll_Over_Right_Rules_Audio]
+        [MQTT_Action_Name.roll_over_right, Roll_Over_Right_Rules_Audio],
+
+        [MQTT_Action_Name.pat_back_left, PAT_BACK_Left_Rules_Audio],
+        [MQTT_Action_Name.pat_back_right, PAT_BACK_Right_Rules_Audio]
     ]
 );

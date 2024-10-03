@@ -22,7 +22,8 @@ export default class AudioSystem {
 
     set_listener(event_id: string, audio_interface: AudioInterface) {
         if (audio_interface == null) return;
-        
+        console.log(this.c_audio)
+
         if (this.c_audio != undefined && this.c_audio.force_play && audio_interface.force_play) {
             this.n_audio = audio_interface;
             return;

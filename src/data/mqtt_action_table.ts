@@ -56,12 +56,17 @@ export const MaterialDetailsLookUp = new Map<string, string[]> ([
 
 export const MaterialAudioPair = new Map<string, string> ([
     [MQTT_Action_Name.roll_over_left, AudioEventValue.Event005_翻身教材左翻],
-    [MQTT_Action_Name.roll_over_right, AudioEventValue.Event006_翻身教材右翻]
+    [MQTT_Action_Name.roll_over_right, AudioEventValue.Event006_翻身教材右翻],
+    [MQTT_Action_Name.pat_back_left, AudioEventValue.Event080_拍背教材左拍背_editing],
+    [MQTT_Action_Name.pat_back_right, AudioEventValue.Event081_拍背教材右拍背_editing]
 ]);
 
 export const TrainingStartAudioPair = new Map<string, string> ([
     [MQTT_Action_Name.roll_over_left, AudioEventValue.Event008_左翻抬手動作開始],
-    [MQTT_Action_Name.roll_over_right, AudioEventValue.Event026_右翻抬手動作開始]
+    [MQTT_Action_Name.roll_over_right, AudioEventValue.Event026_右翻抬手動作開始],
+
+    [MQTT_Action_Name.pat_back_left, AudioEventValue.Event082_肺下葉拍背動作開始_editing],
+    [MQTT_Action_Name.pat_back_right, AudioEventValue.Event082_肺下葉拍背動作開始_editing]
 ]);
 
 export const MQTT_Action_Validation = new Map<string, Validation_Score[]>(
