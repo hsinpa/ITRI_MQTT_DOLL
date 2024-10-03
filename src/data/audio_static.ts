@@ -54,13 +54,26 @@ export const AudioEventValue = Object.freeze({
     Event055_此培訓操作已完成: '0055_此培訓操作已完成.mp3',
     Event056_感謝您的體驗: '0056_感謝您的體驗.mp3',
     
+    Event064_請拍擊肺下葉_editing: '0064_請拍擊肺下葉_editing.mp3',
+    Event068_請拍擊肺中葉_editing: '0068_請拍擊肺中葉_editing.mp3',
+    Event071_請拍擊肺上葉_editing: '0071_請拍擊肺上葉_editing.mp3',
+
+    Event066_肺下葉拍背完成_editing: '0066_肺下葉拍背完成_editing.mp3',
+    Event069_肺中葉拍背完成_editing: '0069_肺中葉拍背完成_editing.mp3',
+    Event072_肺上葉拍背完成_editing: '0072_肺上葉拍背完成editing.mp3',
+
+    Event073_請加強拍背力道_editing: '0073_請加強拍背力道_editing.mp3',
+    Event074_請加快拍背速度_editing: '0074_請加快拍背速度_editing.mp3',
     Event078_請放輕拍背力道_editing: '0078_請放輕拍背力道_editing.mp3',
     Event079_請放慢拍背速度_editing: '0079_請放慢拍背速度_editing.mp3',
+
     Event080_拍背教材左拍背_editing: '0080_拍背教材左拍背_editing.mp3',
     Event081_拍背教材右拍背_editing: '0081_拍背教材右拍背_editing.mp3',
+    
     Event082_肺下葉拍背動作開始_editing: '0082_肺下葉拍背動作開始_editing.mp3',
     Event083_肺中葉拍背動作開始_editing: '0083_肺中葉拍背動作開始_editing.mp3',
     Event084_肺上葉拍背動作開始_editing: '0084_肺上葉拍背動作開始_editing.mp3',
+
     Event085_肺下葉拍背訓練時誤拍肺中葉_editing: '0085_肺下葉拍背訓練時誤拍肺中葉_editing.mp3',
     Event086_肺下葉拍背訓練時誤拍肺上葉_editing: '0086_肺下葉拍背訓練時誤拍肺上葉_editing.mp3',
     Event087_肺下葉拍背訓練時誤拍脊椎_editing: '0087_肺下葉拍背訓練時誤拍脊椎_editing.mp3',
@@ -73,6 +86,7 @@ export const AudioEventValue = Object.freeze({
     Event094_肺上葉拍背訓練時誤拍肺中葉_editing: '0094_肺上葉拍背訓練時誤拍肺中葉_editing.mp3',
     Event095_肺上葉拍背訓練時誤拍脊椎_editing: '0095_肺上葉拍背訓練時誤拍脊椎_editing.mp3',
     Event096_肺上葉拍背訓練時誤拍腰部_editing: '0096_肺上葉拍背訓練時誤拍腰部_editing.mp3',
+    
     Event097_請留意不要誤拍脊椎_editing: '0097_請留意不要誤拍脊椎_editing.mp3',
     Event098_請留意不要誤拍腰部_editing: '0098_請留意不要誤拍腰部_editing.mp3',
 });
