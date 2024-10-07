@@ -26,6 +26,8 @@ interface Validation_State_Result {
 
 let local_val_state = '';
 let local_record: HistoryRecord;
+let message_count = 0;
+let track_message_count = 0;
 
 let register_event = function(event_system: EventSystem, mqtt_server: MQTTServer , validation_list: Validation_Score[] | undefined, callback: any) {
     if (validation_list == undefined) return;
@@ -63,9 +65,13 @@ let get_validation_scores = function(target_validation_id: string, scores: Valid
             if (valid_score == undefined) 
                 valid_score = 0;
             
-            min_score = Math.min(min_score, valid_score);
+             min_score = Math.min(min_score, valid_score);
         }
-        console.log('min_score', min_score);
+
+        // if (track_message_count < message_count) {
+        //     min_score = Clamp(min_score, 0, 3);    
+        //     track_message_count = message_count;
+        // }
 
         return {score: min_score, index: s_index};
     }
@@ -180,7 +186,8 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
         let current_index = validation_table.findIndex(x => x.name == local_val_state);
         
         if (validation_scores.index < 0 || rule == null) return;
-
+        message_count++;
+        
         let clone_validation_score_map: Map<string, number> = deep_clone_map(validation_score_map);
         let clone_validation_score_obj: Validation_Score[] = deep_clone_object(validationScores);
 
@@ -191,28 +198,27 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
 
         let original_score = clone_validation_score_map.get(event_id);
         let original_v_score = clone_validation_score_obj[validation_scores.index].score;
+        
+        // clone_validation_score_map.set(event_id, score);
 
-        clone_validation_score_map.set(event_id, score);
+        // validation_scores = get_validation_scores(event_id, clone_validation_score_obj, clone_validation_score_map, mqtt_server);
+        original_v_score =  Clamp(original_v_score + 0.3, 0, max_score);
+        if (3 - original_v_score < 0.1) original_v_score = 3;
 
-        validation_scores = get_validation_scores(event_id, clone_validation_score_obj, clone_validation_score_map, mqtt_server);
-        clone_validation_score_obj[validation_scores.index].score = validation_scores.score;
+        validation_scores.score = original_v_score;
+        clone_validation_score_obj[validation_scores.index].score =  original_v_score;
 
+        console.log("clone_validation_score_obj", clone_validation_score_obj)
         let rule_match_result = rule_matching(revert_event_id, local_val_state, rule, clone_validation_score_obj);
 
         // Play Audio 
         if (audio_rule != null) {
-            console.log(revert_event_id, local_val_state, audio_rule, clone_validation_score_obj);
             let audio_match_result = rule_matching(revert_event_id, local_val_state, audio_rule, clone_validation_score_obj);
-            let single_audio_match_result = single_audio_rule_matching(revert_event_id, score, audio_rule);
 
-            if (single_audio_match_result != null) {
-                console.log(single_audio_match_result)
-                audio_handler.play(single_audio_match_result);
-            }
-            else if (audio_match_result != null) {
+            if (audio_match_result != null)
                 audio_handler.play(audio_match_result);
-            }
         }
+        console.log("rule_match_result " + rule_match_result);
 
         if (!process_msg_event(revert_event_id, rule)) return;
 
