@@ -189,8 +189,8 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
         let clone_validation_score_map: Map<string, number> = deep_clone_map(validation_score_map);
         let clone_validation_score_obj: Validation_Score[] = deep_clone_object(validationScores);
 
-        let score = parseFloat(message.toString());
-            score = Clamp(score, 0, max_score);
+        let score_raw = parseInt(message.toString());
+        let score = Clamp(score_raw, 0, max_score);
 
         let original_score = clone_validation_score_map.get(event_id);
         let original_v_score = clone_validation_score_obj[validation_scores.index].score;
@@ -200,7 +200,7 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
             clone_validation_score_map.set(event_id, score);
             validation_scores = get_validation_scores(event_id, clone_validation_score_obj, clone_validation_score_map, mqtt_server);
             clone_validation_score_obj[validation_scores.index].score = validation_scores.score;
-        } else {
+        } else if (score_raw >= 1 && score_raw <= 3) {
             original_v_score =  Clamp(original_v_score + 0.3, 0, max_score);
             if (3 - original_v_score < 0.1) original_v_score = 3; 
                
