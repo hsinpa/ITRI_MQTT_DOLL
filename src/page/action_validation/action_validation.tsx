@@ -206,6 +206,9 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
                
             validation_scores.score = original_v_score;
             clone_validation_score_obj[validation_scores.index].score =  original_v_score;    
+        } else
+        {
+            return;
         }
 
 
