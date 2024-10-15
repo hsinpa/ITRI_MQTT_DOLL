@@ -6,7 +6,7 @@ import '../../assets/scss/record_page.scss'
 import { LocalStorageSystem } from "../../mqtt/local_record_system"
 import React, { useEffect, useState } from "react"
 import { HistoryRecord } from "../../data/static_share_varaible"
-import moment from "moment"
+import moment, { invalid } from "moment"
 import { FormatString } from "../../utility/UtilityFunc"
 import { AudioEventID, AudioEventValue } from "../../data/audio_static"
 import { useNavigate } from "react-router-dom";
@@ -26,16 +26,19 @@ const Record_Row_View = function({record, user_info}: {record: HistoryRecord, us
     }
 
     let remark_text = (record.remark != undefined && record.remark != '') ? record.remark : i18next.t('record_none');
-
-    console.log(record.time)
-
+    
     let date = new Date(record.time);
     date.setHours(date.getHours() + 8);
+    let time_message = record.time;
+
+    if (date instanceof Date && !isNaN(date.getMilliseconds())) {
+        time_message = moment(date).format("YYYY-MM-DD HH:mm");
+    }
 
     return (
     <tr>
         <td>{  user_info?.name }</td>
-        <td>{ moment(date).format("YYYY-MM-DD HH:mm")  }</td>
+        <td>{ time_message  }</td>
         <td>{ record.completeness == 100 ? i18next.t('record_complete') : i18next.t('record_non_complete')}</td>
         <td>{record.title}</td>
         <td className="error_msg" onClick={on_error_msg_click}>{is_error_reveal ? detail_error_msg : error_msg}</td>
