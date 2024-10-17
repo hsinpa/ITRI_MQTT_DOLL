@@ -5,7 +5,7 @@ export const API = Object.freeze({
 });
 
 export const SELF_DOMAIN = 'http://localhost:8842/'
-export const PROD_DOMAIN = 'https://psycho-councel.zapto.org/'
+export const PROD_DOMAIN = 'https://yuri-instance.zapto.org/doll/'
 
 export const Get_API = function(url: string) {
     return PROD_DOMAIN + url;
