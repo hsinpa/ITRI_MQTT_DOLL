@@ -13,8 +13,23 @@ import { useNavigate } from "react-router-dom";
 import { AccountInterface } from "../../data/api_static"
 
 
-const Record_Row_View = function({record, user_info}: {record: HistoryRecord, user_info: AccountInterface | null}) {
+const Record_Row_View = function({record, user_info, local_storage_sys}: {record: HistoryRecord, user_info: AccountInterface | null, local_storage_sys: LocalStorageSystem}) {
+    let date = new Date(record.time);
+    date.setHours(date.getHours() + 8);
+    let time_message = record.time;
+
+    if (date instanceof Date && !isNaN(date.getMilliseconds())) {
+        time_message = moment(date).format("YYYY-MM-DD HH:mm");
+    }
+
+    let user_name: string | undefined = user_info?.name + ' ' + moment(date).format("YYYY-MM-DD");
+    if (record.id != undefined)
+        user_name = local_storage_sys.get_name(record.id, user_name);
+
+
     const [is_error_reveal, set_error_reveal] = useState(false);
+    const [is_name_focus, set_name_focus] = useState(false);
+    const [column_user_name, set_user_name] = useState(user_name);
 
     let error_msg = FormatString(i18next.t('record_error_message'), [record.errorPrompt.length]);
     let detail_error_msg = (<section>{record.errorPrompt.map( (x, i)=><p key={i}>{x}</p>)}</section>);
@@ -27,17 +42,31 @@ const Record_Row_View = function({record, user_info}: {record: HistoryRecord, us
 
     let remark_text = (record.remark != undefined && record.remark != '') ? record.remark : i18next.t('record_none');
     
-    let date = new Date(record.time);
-    date.setHours(date.getHours() + 8);
-    let time_message = record.time;
 
-    if (date instanceof Date && !isNaN(date.getMilliseconds())) {
-        time_message = moment(date).format("YYYY-MM-DD HH:mm");
+    let on_name_column_click = function(event: React.MouseEvent<HTMLSpanElement>) {
+        set_name_focus(true);
+    }
+
+    let on_name_column_blur = function(event: React.FocusEvent<HTMLInputElement>) {
+        set_name_focus(false);
+    }
+
+    let on_name_column_change = function(event: React.FocusEvent<HTMLInputElement>) {
+        let update_name = (event.target as HTMLInputElement).value;
+        set_user_name(update_name);
+
+        if (record.id != undefined)
+            local_storage_sys.update_local_name(record.id, update_name);
+    }
+
+    let name_input_dom = <span onClick={on_name_column_click}>{column_user_name}</span>;
+    if (is_name_focus) {
+        name_input_dom = <input type='text' onChange={on_name_column_change} onBlur={on_name_column_blur} value={column_user_name} autoFocus={true}></input>
     }
 
     return (
     <tr>
-        <td>{  user_info?.name }</td>
+        <td>{  name_input_dom }</td>
         <td>{ time_message  }</td>
         <td>{ record.completeness == 100 ? i18next.t('record_complete') : i18next.t('record_non_complete')}</td>
         <td>{record.title}</td>
@@ -51,10 +80,9 @@ export const Record_View = function({event_system, mqtt_server, local_storage_sy
     const navigate = useNavigate();
     const [records, setRecords] = useState<HistoryRecord[]>([]);
     const user_info = local_storage_sys.account.get_info();
-    
+
     const fetch_records = async function() {        
         let sort_records = await local_storage_sys.get_records();
-        console.log(sort_records)
 
         if (sort_records == null) {
             navigate('/');
@@ -91,7 +119,7 @@ export const Record_View = function({event_system, mqtt_server, local_storage_sy
 
                 <tbody>
                     {
-                        records.reverse().map(x=> <Record_Row_View key={x.id} user_info={user_info} record={x}></Record_Row_View>)
+                        records.reverse().map(x=> <Record_Row_View key={x.id} user_info={user_info} record={x} local_storage_sys={local_storage_sys}></Record_Row_View> )
                     }
                 </tbody>
             </table>
