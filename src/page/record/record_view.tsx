@@ -13,16 +13,20 @@ import { useNavigate } from "react-router-dom";
 import { AccountInterface } from "../../data/api_static"
 
 
-const Record_Row_View = function({record, user_info, local_storage_sys}: {record: HistoryRecord, user_info: AccountInterface | null, local_storage_sys: LocalStorageSystem}) {
-    let date = new Date(record.time);
+function get_date(date_str: string, foramting: string) {
+    let date = new Date(date_str);
     date.setHours(date.getHours() + 8);
-    let time_message = record.time;
-
+    let time_message = date_str;
     if (date instanceof Date && !isNaN(date.getMilliseconds())) {
-        time_message = moment(date).format("YYYY-MM-DD HH:mm");
+        time_message = moment(date).format(foramting);
     }
+    return time_message;
+}
 
-    let user_name: string | undefined = user_info?.name + ' ' + moment(date).format("YYYY-MM-DD");
+const Record_Row_View = function({record, user_info, local_storage_sys}: {record: HistoryRecord, user_info: AccountInterface | null, local_storage_sys: LocalStorageSystem}) {
+    let time_message = get_date(record.time, "YYYY-MM-DD HH:mm");
+
+    let user_name: string | undefined = user_info?.name + ' ' + get_date(record.time, "YYYY-MM-DD");
     if (record.id != undefined)
         user_name = local_storage_sys.get_name(record.id, user_name);
 
