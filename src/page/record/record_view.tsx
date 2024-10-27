@@ -26,10 +26,9 @@ function get_date(date_str: string, foramting: string) {
 const Record_Row_View = function({record, user_info, local_storage_sys}: {record: HistoryRecord, user_info: AccountInterface | null, local_storage_sys: LocalStorageSystem}) {
     let time_message = get_date(record.time, "YYYY-MM-DD HH:mm");
 
-    let user_name: string | undefined = user_info?.name + ' ' + get_date(record.time, "YYYY-MM-DD");
+    let user_name: string | undefined = user_info?.name + ' ' + get_date(record.time, "YYYY-MM-DD HH:mm");
     if (record.id != undefined)
         user_name = local_storage_sys.get_name(record.id, user_name);
-
 
     const [is_error_reveal, set_error_reveal] = useState(false);
     const [is_name_focus, set_name_focus] = useState(false);
