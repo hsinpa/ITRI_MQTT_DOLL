@@ -5,14 +5,23 @@ import { API, Get_API } from "../data/api_static";
 import { FormatString } from "../utility/UtilityFunc";
 
 const KEY = 'records';
+const LOCAL_NAME_KEY = 'names';
+
 export class LocalStorageSystem {
     private _local_records: HistoryRecord[] = [];
+
+    private _local_name_dict: Map<string, string> = new Map();
     private _account: AccountSystem;
 
     constructor(account: AccountSystem) {
         this._account = account;
         let records = localStorage.getItem(KEY);
-        
+
+        let local_names_str = localStorage.getItem(LOCAL_NAME_KEY);
+
+        if (local_names_str != undefined)
+            this._local_name_dict = new Map(JSON.parse(local_names_str));
+
         if (records != null) {
             this._local_records = JSON.parse(records);
         }
@@ -45,6 +54,18 @@ export class LocalStorageSystem {
         }
 
         return null;
+    }
+
+    get_name(id: string, default_name: string) {
+        let p_name = this._local_name_dict.get(id);
+        if (p_name == undefined) return default_name;
+
+        return p_name;
+    }
+
+    update_local_name(id: string, name: string) {
+        this._local_name_dict.set(id, name);
+        localStorage.setItem(LOCAL_NAME_KEY, JSON.stringify(Array.from( this._local_name_dict.entries())) );
     }
 
     async push_records(h_record: HistoryRecord) {
