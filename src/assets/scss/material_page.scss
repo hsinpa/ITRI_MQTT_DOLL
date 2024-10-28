@@ -48,11 +48,13 @@
         position: absolute;
         top:5px;
         right:5px;
+        display: flex;
+        gap: 0.1em;
 
-        .logout {
-            right: 0.5em;
-            position: relative;
-        }
+        // .logout {
+        //     right: 0.5em;
+        //     position: relative;
+        // }
     }
 }
 

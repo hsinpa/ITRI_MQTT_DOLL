@@ -7,14 +7,27 @@ import { useEffect, useState } from 'react'
 import { DollIDList } from '../../data/static_share_varaible'
 import { DollDropdown } from './doll_dropdown'
 import { AudioEventID, AudioEventValue } from '../../data/audio_static'
+import { LocalStorageSystem } from '../../mqtt/local_record_system'
+import { AccountSystem } from '../../utility/AccountSystem'
+import { useTempUserInfoStore } from '../../stores/user_stores'
+import moment from 'moment'
 
-
-
-export const ActionPage = function({event_system, mqtt_server}: {event_system: EventSystem, mqtt_server: MQTTServer}) {
+export const ActionPage = function({event_system, mqtt_server, local_storage_sys}: 
+    {event_system: EventSystem, mqtt_server: MQTTServer, local_storage_sys: LocalStorageSystem}) {
     const [client_id, set_client_id] = useState<string>(mqtt_server.client_id);
+    let set_name = useTempUserInfoStore(x=>x.set_name);
 
     useEffect(() => {
         mqtt_server.to_default();
+
+        // Set name
+        let account_system = new AccountSystem();
+        let account_interface = account_system.get_info();
+        let default_user_name = (account_interface != null) ? account_interface.name: 'User';
+        let date = new Date();
+        default_user_name += " " + moment(date).format('YYYY-MM-DD HH:mm');
+    
+        set_name(default_user_name);
     }, []);
 
     let on_dropdown_select = function(index: number) {

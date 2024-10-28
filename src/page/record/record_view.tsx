@@ -11,6 +11,7 @@ import { FormatString } from "../../utility/UtilityFunc"
 import { AudioEventID, AudioEventValue } from "../../data/audio_static"
 import { useNavigate } from "react-router-dom";
 import { AccountInterface } from "../../data/api_static"
+import { useTempUserInfoStore } from "../../stores/user_stores"
 
 
 function get_date(date_str: string, foramting: string) {

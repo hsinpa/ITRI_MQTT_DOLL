@@ -68,7 +68,7 @@ export class LocalStorageSystem {
         localStorage.setItem(LOCAL_NAME_KEY, JSON.stringify(Array.from( this._local_name_dict.entries())) );
     }
 
-    async push_records(h_record: HistoryRecord) {
+    async push_records(h_record: HistoryRecord, default_name: string) {
         // this._local_records = [...this._local_records, h_record];
         // localStorage.setItem(KEY, JSON.stringify(this._local_records));
         let info = this.account.get_info();
@@ -84,8 +84,11 @@ export class LocalStorageSystem {
             let fetch_r =  await fetch(url, {headers: {'Content-Type': 'application/json', 'Authorization': token },
                         method:'post',
                         body: JSON.stringify(h_record)})
+            let fetch_json = await fetch_r.json();
+            
+            this.update_local_name(fetch_json['data']['id'], default_name)
 
-            console.log(await fetch_r.json());
+            console.log(fetch_json);
 
             localStorage.setItem('incremental_id', (incremental_id).toString());
         }
