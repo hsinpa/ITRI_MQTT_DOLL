@@ -18,6 +18,7 @@ import { AudioEventID, AudioEventValue } from "../../data/audio_static";
 import { LocalStorageSystem } from "../../mqtt/local_record_system";
 import itri_logo from '../../assets/texture/sprite/itri-logo-02.png';
 import itri_logo_02 from '../../assets/texture/sprite/afd_logo.png';
+import { useTempUserInfoStore } from "../../stores/user_stores";
 
 interface Validation_State_Result {
     index: number,
@@ -87,6 +88,7 @@ let cancellation_token: CancellationToken = {is_cancel: false};
 export const ActionValidationPage = function({event_system, mqtt_server, record}: 
                                             {event_system: EventSystem, mqtt_server: MQTTServer, record: LocalStorageSystem}) {
     let [searchParams, setSearchParams] = useSearchParams();
+    const username = useTempUserInfoStore(x=>x.name);
     let material_name = searchParams.get('name');
 
     if (material_name == null) material_name = "動作判讀";
@@ -150,7 +152,7 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
 
             local_record.completeness = 100;
             local_record.time = new Date().toUTCString();
-            record.push_records(local_record);
+            record.push_records(local_record, username);
 
             setValidationFulfilled(true);
             setDisplayMessage(t("stage_complete"))

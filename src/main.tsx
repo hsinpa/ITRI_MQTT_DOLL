@@ -53,7 +53,7 @@ const router = createHashRouter([
   },
   {
     path: "/action_page",
-    element: <ActionPage event_system={event_system} mqtt_server={mqtt_server}/>,
+    element: <ActionPage event_system={event_system} mqtt_server={mqtt_server} local_storage_sys={local_storage_sys} />,
   },
   {
     path: "/material_page",

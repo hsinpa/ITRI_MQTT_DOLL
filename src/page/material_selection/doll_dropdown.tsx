@@ -1,6 +1,7 @@
 import store from "store2";
 import { DoDelayAction } from "../../utility/UtilityFunc";
 import { Link, useNavigate } from "react-router-dom";
+import { Name_Field } from "./name_field";
 
 export const DollDropdown = function({selected_option, options, select_callback}: 
                                     {selected_option: string, options: string[], select_callback: (index: number) => void }) {
@@ -58,6 +59,7 @@ export const DollDropdown = function({selected_option, options, select_callback}
 
     return (
         <div className="dropdown doll-dropdown" >
+            <Name_Field></Name_Field>
             <Link className='button logout' to='/record_page'>歷史成績</Link>
             <button className='button logout' onClick={on_logout}>登出</button>
 
