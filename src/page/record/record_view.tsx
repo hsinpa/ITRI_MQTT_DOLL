@@ -28,8 +28,12 @@ const Record_Row_View = function({record, user_info, local_storage_sys}: {record
     let time_message = get_date(record.time, "YYYY-MM-DD HH:mm");
 
     let user_name: string | undefined = user_info?.name + ' ' + get_date(record.time, "YYYY-MM-DD HH:mm");
+
     if (record.id != undefined)
         user_name = local_storage_sys.get_name(record.id, user_name);
+
+    if (record.name != undefined)
+        user_name = record.name;
 
     const [is_error_reveal, set_error_reveal] = useState(false);
     const [is_name_focus, set_name_focus] = useState(false);
@@ -70,7 +74,7 @@ const Record_Row_View = function({record, user_info, local_storage_sys}: {record
 
     return (
     <tr>
-        <td>{  name_input_dom }</td>
+        <td>{ name_input_dom }</td>
         <td>{ time_message  }</td>
         <td>{ record.completeness == 100 ? i18next.t('record_complete') : i18next.t('record_non_complete')}</td>
         <td>{record.title}</td>
