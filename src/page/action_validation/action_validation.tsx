@@ -267,10 +267,10 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
 
     useEffect(() => {
         record.account.refresh_token();
-        console.log("ActionValidationPage");
         cancellation_token.is_cancel = false;
         local_record = get_empty_record();
         local_record.completeness = 0;
+        local_record.name = username;
         local_record.title = i18next.t(material_name);
 
         set_val_state(validation_table[0]);
