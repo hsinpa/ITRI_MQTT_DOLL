@@ -11,8 +11,6 @@ import { FormatString } from "../../utility/UtilityFunc"
 import { AudioEventID, AudioEventValue } from "../../data/audio_static"
 import { useNavigate } from "react-router-dom";
 import { AccountInterface } from "../../data/api_static"
-import { useTempUserInfoStore } from "../../stores/user_stores"
-
 
 function get_date(date_str: string, foramting: string) {
     let date = new Date(date_str);
@@ -29,10 +27,7 @@ const Record_Row_View = function({record, user_info, local_storage_sys}: {record
 
     let user_name: string | undefined = user_info?.name + ' ' + get_date(record.time, "YYYY-MM-DD HH:mm");
 
-    if (record.id != undefined)
-        user_name = local_storage_sys.get_name(record.id, user_name);
-
-    if (record.name != undefined)
+    if (record.name != undefined && record.name != '')
         user_name = record.name;
 
     const [is_error_reveal, set_error_reveal] = useState(false);

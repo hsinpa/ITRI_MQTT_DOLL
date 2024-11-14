@@ -25,7 +25,8 @@ export const Roll_Over_Left_Rules = new Map<string, Rule_Type[]>([
                 type: 'error',
                 trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.All_Off}],
                 operation: '<',
-                value: 2
+                value: 2,
+                error_message: 'roll_over_knee_arm_error'
             },
             {
                 score_id: MQTT_State_Name.body,
@@ -33,7 +34,8 @@ export const Roll_Over_Left_Rules = new Map<string, Rule_Type[]>([
                 type: 'warn',
                 trigger_events: [],
                 operation: '>',
-                value: 2
+                value: 2,
+                error_message: 'roll_over_knee_body_error'
             },
             {
                 score_id: MQTT_State_Name.knee,
@@ -84,8 +86,8 @@ export const Roll_Over_Right_Rules = new Map<string, Rule_Type[]>([
                 type: 'error',
                 operation: '<',
                 trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.All_Off}],
-
-                value: 2
+                value: 2,
+                error_message: 'roll_over_knee_arm_error',
             },
             {
                 score_id: MQTT_State_Name.body,
@@ -94,8 +96,8 @@ export const Roll_Over_Right_Rules = new Map<string, Rule_Type[]>([
                 type: 'warn',
                 operation: '>',
                 trigger_events: [],
-
-                value: 2
+                value: 2,
+                error_message: 'roll_over_knee_body_error'
             },
             {
                 score_id: MQTT_State_Name.knee,
@@ -104,7 +106,6 @@ export const Roll_Over_Right_Rules = new Map<string, Rule_Type[]>([
                 type: 'success',
                 operation: '==',
                 trigger_events: [{id: MQTTLightBulbIn.ID, value: MQTTLightBulbIn.Bulb_2}],
-
                 value: 3
             }
         ]

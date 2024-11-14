@@ -15,7 +15,7 @@ export const Roll_Over_Left_Rules_Audio = new Map<string, Rule_Type[]>([
                 type: 'success',
                 operation: '==',
                 sound_effect: [AudioEventValue.Event012_左翻抬手動作完成, AudioEventValue.Event014_左翻抬腳動作開始],
-                value: 3
+                value: 3,
             },
             {
                 score_id: MQTT_State_Name.knee,
@@ -23,7 +23,7 @@ export const Roll_Over_Left_Rules_Audio = new Map<string, Rule_Type[]>([
                 type: 'none',
                 operation: '>',
                 sound_effect: [AudioEventValue.Event044_抬手訓練時誤做抬腳],
-                value: 2
+                value: 2,
             },
             {
                 score_id: MQTT_State_Name.body,
@@ -31,7 +31,7 @@ export const Roll_Over_Left_Rules_Audio = new Map<string, Rule_Type[]>([
                 type: 'none',
                 operation: '>',
                 sound_effect: [AudioEventValue.Event045_抬手訓練時誤做翻身],
-                value: 2
+                value: 2,
             },
             {
                 score_id: MQTT_State_Name.hand,

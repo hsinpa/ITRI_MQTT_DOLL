@@ -12,6 +12,7 @@ export interface Rule_Type {
     type: 'warn' | 'error' | 'success' | 'none'
     operation: '>' | '<' | '==',
     value: number,
+    error_message?: string
 }
 
 export const MQTT_Action_Rules = new Map<string, Map<string, Rule_Type[]> >(

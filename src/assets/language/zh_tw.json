@@ -51,6 +51,20 @@
     "record_error_message":"錯誤次數 {0}次",
 
     "stage_complete": "訓練完成, 五秒後返回選擇介面",
-    "stage_error": "{0}訓練時誤做{1}"
+    "stage_error": "{0}訓練時誤做{1}",
+
+    "roll_over_arm_knee_error": "抬手訓練時誤做抬腳",
+    "roll_over_arm_body_error": "抬手訓練時誤做翻身",
+    "roll_over_knee_arm_error": "抬腳訓練時誤放抬手",
+    "roll_over_knee_body_error": "抬腳訓練時誤做翻身",
+
+    "pat_back_lung_bottom_lung_center_error": "肺下葉訓練時誤拍肺中葉",
+    "pat_back_lung_bottom_lung_upper_error": "肺下葉訓練時誤拍肺上葉",
+
+    "pat_back_lung_center_lung_bottom_error": "肺中葉訓練時誤拍肺下葉",
+    "pat_back_lung_center_lung_upper_error": "肺中葉訓練時誤拍肺上葉",
+
+    "pat_back_lung_upper_lung_bottom_error": "肺上葉訓練時誤拍肺下葉",
+    "pat_back_lung_upper_lung_center_error": "肺上葉訓練時誤拍肺中葉"
 
 }

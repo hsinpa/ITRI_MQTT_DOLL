@@ -135,13 +135,6 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
             return;
         }
 
-        if (rule.type == 'warn' || rule.type == 'error') {
-            let error_msg = (t("stage_error"))
-            let final_msg = FormatString(error_msg, [t(local_val_state), t(rule.score_id)]);
-            setDisplayMessage(final_msg)
-            local_record.errorPrompt.push(final_msg);
-        }
-
         if (rule.type == 'warn') {
             return;
         }
@@ -197,14 +190,15 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
         let original_score = clone_validation_score_map.get(event_id);
         let original_v_score = clone_validation_score_obj[validation_scores.index].score;
 
-        console.log(material_name);
         if (material_name == "roll_over_left" || material_name == "roll_over_right") {
             clone_validation_score_map.set(event_id, score);
             validation_scores = get_validation_scores(event_id, clone_validation_score_obj, clone_validation_score_map, mqtt_server);
             clone_validation_score_obj[validation_scores.index].score = validation_scores.score;
         } else if (score_raw >= 1 && score_raw <= 3) {
-            original_v_score =  Clamp(original_v_score + 0.3, 0, max_score);
-            if (3 - original_v_score < 0.1) original_v_score = 3; 
+            original_v_score =  original_v_score + 0.3;// Clamp(original_v_score + 0.3, 0, max_score);
+            
+            let remain = Math.abs(3 - original_v_score);
+            if ( remain >= 0 && remain < 0.1) original_v_score = 3; 
                
             validation_scores.score = original_v_score;
             clone_validation_score_obj[validation_scores.index].score =  original_v_score;    
@@ -214,15 +208,33 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
         }
 
 
-        console.log("clone_validation_score_obj", clone_validation_score_obj)
+        // console.log("revert_event_id", revert_event_id)
+        // console.log("local_val_state", local_val_state)
+        // console.log("rule", rule)
+        // console.log("score", score)
+        // console.log("clone_validation_score_obj", clone_validation_score_obj)
+
         let rule_match_result = rule_matching(revert_event_id, local_val_state, rule, clone_validation_score_obj);
 
         // Play Audio 
-        if (audio_rule != null) {
+        if (audio_rule != null && rule_match_result != null) {
             let audio_match_result = rule_matching(revert_event_id, local_val_state, audio_rule, clone_validation_score_obj);
 
             if (audio_match_result != null)
                 audio_handler.play(audio_match_result);
+            
+            if (rule_match_result.type == 'warn' || rule_match_result.type == 'error') {
+                let error_msg = (t("stage_error"));
+                let final_msg = FormatString(error_msg, [t(local_val_state), t(rule_match_result.score_id)]);
+                
+                if (rule_match_result.error_message != undefined) {
+                    final_msg = t(rule_match_result.error_message)
+                }
+                
+                console.log(final_msg);
+                setDisplayMessage(final_msg)
+                local_record.errorPrompt.push(final_msg);
+            }
         }
         console.log("rule_match_result " + rule_match_result);
 
