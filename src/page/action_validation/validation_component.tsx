@@ -1,12 +1,13 @@
 import no_icon from '../../assets/texture/sprite/icon_no.png';
 import yes_icon from '../../assets/texture/sprite/icon_yes.png';
+import { Clamp } from '../../utility/UtilityFunc';
 
 export const ValidationComponent = function({name, id, on_click, progress} : 
                                             {name: string, id: number, on_click: (id: number) => void, progress: number}) {
-    const progress_value = Math.round(progress * 100);
+    const progress_value = Clamp(Math.round(progress * 100), 0, 100);
     const progress_text = progress_value + "%";
 
-    let icon = (progress == 1) ? yes_icon : no_icon;
+    let icon = (progress >= 1) ? yes_icon : no_icon;
 
     const progress_style = {
         width: progress_text

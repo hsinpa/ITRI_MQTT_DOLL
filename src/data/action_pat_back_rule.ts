@@ -45,7 +45,7 @@ export const Pat_Back_Left_Rules = new Map<string, Rule_Type[]>([
                 trigger_events: [],
                 type: 'warn',
                 operation: '>',
-                value: 3,
+                value: 4.1,
                 error_message: 'pat_back_lung_center_lung_bottom_error'
             },
 
@@ -77,7 +77,7 @@ export const Pat_Back_Left_Rules = new Map<string, Rule_Type[]>([
                 trigger_events: [],
                 type: 'warn',
                 operation: '>',
-                value: 3,
+                value: 4.1,
                 error_message: 'pat_back_lung_upper_lung_bottom_error'
             },
 
@@ -87,7 +87,7 @@ export const Pat_Back_Left_Rules = new Map<string, Rule_Type[]>([
                 trigger_events: [],
                 type: 'warn',
                 operation: '>',
-                value: 3,
+                value: 4.1,
                 error_message: 'pat_back_lung_upper_lung_center_error'
             },
 
@@ -143,7 +143,7 @@ export const Pat_Back_Right_Rules = new Map<string, Rule_Type[]>([
                 trigger_events: [],
                 type: 'warn',
                 operation: '>',
-                value: 3,
+                value:  4.1,
                 error_message: 'pat_back_lung_center_lung_bottom_error'
             },
 
@@ -174,7 +174,7 @@ export const Pat_Back_Right_Rules = new Map<string, Rule_Type[]>([
                 trigger_events: [],
                 type: 'warn',
                 operation: '>',
-                value: 3,
+                value:  4.1,
                 error_message: 'pat_back_lung_upper_lung_bottom_error'
             },
 
@@ -184,7 +184,7 @@ export const Pat_Back_Right_Rules = new Map<string, Rule_Type[]>([
                 trigger_events: [],
                 type: 'warn',
                 operation: '>',
-                value: 3,
+                value:  4.1,
                 error_message: 'pat_back_lung_upper_lung_center_error'
             },
             {

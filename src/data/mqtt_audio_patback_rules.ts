@@ -47,7 +47,7 @@ export const PAT_BACK_Left_Rules_Audio = new Map<string, Rule_Type[]>([
                 type: 'warn',
                 operation: '>',
                 sound_effect: [AudioEventValue.Event089_肺中葉拍背訓練時誤拍肺下葉_editing],
-                value: 3,
+                value: 4.1,
             },
 
             {
@@ -78,7 +78,7 @@ export const PAT_BACK_Left_Rules_Audio = new Map<string, Rule_Type[]>([
                 type: 'warn',
                 operation: '>',
                 sound_effect: [AudioEventValue.Event093_肺上葉拍背訓練時誤拍肺下葉_editing],
-                value: 3,
+                value:  4.1,
             },
 
             {
@@ -87,7 +87,7 @@ export const PAT_BACK_Left_Rules_Audio = new Map<string, Rule_Type[]>([
                 trigger_events: [],
                 type: 'warn',
                 operation: '>',
-                value: 3,
+                value:  4.1,
                 sound_effect: [AudioEventValue.Event094_肺上葉拍背訓練時誤拍肺中葉_editing],
             },
             {
@@ -143,7 +143,7 @@ export const PAT_BACK_Right_Rules_Audio = new Map<string, Rule_Type[]>([
                 type: 'warn',
                 operation: '>',
                 sound_effect: [AudioEventValue.Event089_肺中葉拍背訓練時誤拍肺下葉_editing],
-                value: 3,
+                value:  4.1,
             },
 
             {
@@ -175,7 +175,7 @@ export const PAT_BACK_Right_Rules_Audio = new Map<string, Rule_Type[]>([
                 trigger_events: [],
                 type: 'warn',
                 operation: '>',
-                value: 3,
+                value:  4.1,
                 sound_effect: [AudioEventValue.Event093_肺上葉拍背訓練時誤拍肺下葉_editing],
             },
 
@@ -185,7 +185,7 @@ export const PAT_BACK_Right_Rules_Audio = new Map<string, Rule_Type[]>([
                 trigger_events: [],
                 type: 'warn',
                 operation: '>',
-                value: 3,
+                value:  4.1,
                 sound_effect: [AudioEventValue.Event094_肺上葉拍背訓練時誤拍肺中葉_editing],
             },
             {
