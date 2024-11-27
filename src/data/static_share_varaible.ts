@@ -100,6 +100,10 @@ export interface MQTTEvent {
     value: number
 }
 
+export type ErrorPromptMap = {
+    [key: string]: number;
+};
+
 export interface HistoryRecord { 
     caregiverId: string
     name: string,
@@ -107,6 +111,7 @@ export interface HistoryRecord {
     title: string,
     completeness: number,
     errorPrompt: string[],
+    errorPromptMap: ErrorPromptMap,
     id?: string,
     remark?: string,
 }
@@ -120,6 +125,7 @@ export function get_empty_record(): HistoryRecord {
         title: '',
         completeness: 0,
         errorPrompt: [],
+        errorPromptMap: {},
         remark: '',
     }
 }

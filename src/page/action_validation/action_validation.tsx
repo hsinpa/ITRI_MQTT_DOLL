@@ -28,6 +28,17 @@ interface Validation_State_Result {
 let local_val_state = '';
 let local_record: HistoryRecord;
 
+let reformat_record_error = function(local_record: HistoryRecord) {
+    local_record.errorPrompt = [];
+
+    for (const [key, value] of Object.entries(local_record.errorPromptMap)) {
+        console.log(`${key}: ${value}`);
+        local_record.errorPrompt.push(`${key} (${value})`);
+    }
+    return local_record;
+}
+
+
 let register_event = function(event_system: EventSystem, mqtt_server: MQTTServer , validation_list: Validation_Score[] | undefined, callback: any) {
     if (validation_list == undefined) return;
     validation_list.forEach(x=> {
@@ -150,7 +161,8 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
 
             local_record.completeness = 100;
             local_record.time = new Date().toUTCString();
-            record.push_records(local_record, username);
+
+            record.push_records(reformat_record_error(local_record), username);
 
             setValidationFulfilled(true);
             setDisplayMessage(t("stage_complete"))
@@ -231,9 +243,13 @@ export const ActionValidationPage = function({event_system, mqtt_server, record}
                     final_msg = t(rule_match_result.error_message)
                 }
                 
-                console.log(final_msg);
-                setDisplayMessage(final_msg)
-                local_record.errorPrompt.push(final_msg);
+                setDisplayMessage(final_msg)                
+                if (final_msg in local_record.errorPromptMap) {
+                    local_record.errorPromptMap[final_msg] += 1;
+                } else {
+                    local_record.errorPromptMap[final_msg] = 1;
+                }
+
             }
         }
         console.log("rule_match_result " + rule_match_result);
