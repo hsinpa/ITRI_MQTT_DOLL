@@ -32,8 +32,8 @@ let reformat_record_error = function(local_record: HistoryRecord) {
     local_record.errorPrompt = [];
 
     for (const [key, value] of Object.entries(local_record.errorPromptMap)) {
-        console.log(`${key}: ${value}`);
-        local_record.errorPrompt.push(`${key} (${value})`);
+        // console.log(`${key}: ${value}`);
+        local_record.errorPrompt.push(`${key}`);
     }
     return local_record;
 }
